@@ -17,7 +17,7 @@ export function SiteHeader() {
 
   const goToSearch = (data: SiteHeaderFormProps) => {
     const { search } = data
-    console.log(data)
+
     if (search) {
       push(`/anime/${search}`)
     }

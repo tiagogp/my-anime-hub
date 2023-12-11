@@ -9,14 +9,14 @@ export const siteConfig = {
       title: "Home",
       href: "/",
     },
-    {
-      title: "Animes Dublado",
-      href: "/dub",
-    },
-    {
-      title: "Animes",
-      href: "/animes",
-    },
+    // {
+    //   title: "Animes Dublado",
+    //   href: "/dub",
+    // },
+    // {
+    //   title: "Animes",
+    //   href: "/animes",
+    // },
   ],
   links: {
     twitter: "https://twitter.com/shadcn",

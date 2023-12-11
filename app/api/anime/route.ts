@@ -63,9 +63,11 @@ export async function GET() {
     })
   )
 
+  console.log(contentVideos)
+
   // await browser.close();
 
-  const result = contentVideos.filter((item) => item.url?.includes("video"))
+  // const result = contentVideos.filter((item) => item.url?.includes("video"))
 
   // const videos = docHtml.querySelectorAll("article")
 
@@ -98,8 +100,9 @@ export async function GET() {
 
   //     return properties
   //   })
+
   // )
 
 
-  return Response.json({ contentVideos: result })
+  return Response.json({ contentVideos })
 }

@@ -44,19 +44,22 @@ export default async function IndexPage() {
                 alt={video.title}
                 width={200}
                 height={200}
-                className='w-full  transition-all group-hover:scale-125'
+                className='w-full  transition-all duration-300 group-hover:scale-125'
               />
             </div>
             <div className='flex flex-col gap-2 px-4 pb-4 pt-2'>
-              <h3 className='font-bold'>Episódio {video.episode}</h3>
+              <div className='flex items-center justify-between'>
+                <h3 className='font-bold'>Episódio {video.episode}</h3>
+
+                <p className='text-xs opacity-50'> {
+                  new Date(video.createdAt).toLocaleDateString('pt-BR', {
+                    day: 'numeric',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })
+                }</p>
+              </div>
               <p className='truncate text-xs'>{correctTitle(video.title)}</p>
-              <p className='text-xs opacity-50'> {
-                new Date(video.createdAt).toLocaleDateString('pt-BR', {
-                  day: 'numeric',
-                  month: '2-digit',
-                  year: 'numeric',
-                })
-              }</p>
 
             </div>
           </div>

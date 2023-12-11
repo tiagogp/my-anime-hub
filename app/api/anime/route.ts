@@ -2,6 +2,7 @@ import { BASE_URL } from '@/config/constants'
 
 import puppeteer from "puppeteer";
 
+
 export async function GET() {
   const browser = await puppeteer.launch({
     args: [

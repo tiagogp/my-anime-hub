@@ -2,7 +2,6 @@ import { BASE_URL } from '@/config/constants'
 
 import parse from "node-html-parser"
 
-
 export async function GET() {
   // const browser = await puppeteer.launch({
   //   args: [
@@ -62,9 +61,6 @@ export async function GET() {
       return properties
     })
   )
-
-  console.log(contentVideos)
-
   // await browser.close();
 
   // const result = contentVideos.filter((item) => item.url?.includes("video"))

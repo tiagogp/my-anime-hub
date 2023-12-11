@@ -4,6 +4,13 @@ import puppeteer from "puppeteer";
 
 export async function GET() {
   const browser = await puppeteer.launch({
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath: process.env.NODE_ENV === "production" ? "/usr/bin/google-chrome" : puppeteer.executablePath(),
     headless: "new",
   });
 

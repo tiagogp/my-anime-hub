@@ -34,7 +34,7 @@ export default async function IndexPage() {
     <section className="container mx-auto flex w-full max-w-screen-xl flex-col items-center gap-6 pb-8 pt-6">
       <h1 className='w-full text-left text-3xl font-bold'>Lançamentos</h1>
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4'>
-        {contentVideos.map((video) => (
+        {contentVideos.map((video: any) => (
           <div key={video.slug}
             className='group flex cursor-pointer flex-col gap-2 rounded-md border'
           >

@@ -1,13 +1,21 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "OtakuHub",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Anime database and community for anime fans. Discover, share, and discuss anime. Built with Radix UI and Next.js 13.",
   mainNav: [
     {
       title: "Home",
       href: "/",
+    },
+    {
+      title: "Animes Dublado",
+      href: "/dub",
+    },
+    {
+      title: "Animes",
+      href: "/animes",
     },
   ],
   links: {

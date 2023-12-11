@@ -1,41 +1,71 @@
 import { BASE_URL } from '@/config/constants'
 
-import puppeteer from "puppeteer";
+import parse from "node-html-parser"
 
 
 export async function GET() {
-  const browser = await puppeteer.launch({
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--single-process",
-      "--no-zygote",
-    ],
-    executablePath: process.env.NODE_ENV === "production" ? "/usr/bin/google-chrome-stable" : puppeteer.executablePath(),
-    headless: "new",
-  });
+  // const browser = await puppeteer.launch({
+  //   args: [
+  //     "--no-sandbox",
+  //     "--disable-setuid-sandbox",
+  //     "--single-process",
+  //     "--no-zygote",
+  //   ],
+  //   executablePath: process.env.NODE_ENV === "production" ? "/usr/bin/google-chrome-stable" : puppeteer.executablePath(),
+  //   headless: "new",
+  // });
 
-  const [page] = await browser.pages();
-  await page.goto(BASE_URL, {
-    waitUntil: "load",
-  });
+  // const [page] = await browser.pages();
+  // await page.goto(BASE_URL, {
+  //   waitUntil: "load",
+  // });
 
-  const html = await page.$$eval("article", (elements) => {
-    return elements.map((element) => ({
-      title: element.querySelector(".card-title h2")?.textContent?.trim() ?? element.querySelector(".card-title h1")?.textContent?.trim() ?? null,
-      episode: Number(element.querySelector(".card-title span")?.textContent?.replace(/[^\d]/g, "") ?? 0
-      ),
-      url: element.querySelector("a")?.getAttribute("href") ?? "",
-      image: element.querySelector("img")?.getAttribute("src") ?? "",
-      description: element.querySelector("p")?.textContent ?? "",
-      views: 0,
-      createdAt: new Date().toISOString(),
-    }));
-  });
+  const data = await fetch(BASE_URL)
 
-  await browser.close();
+  const html = await data.text()
 
-  const result = html.filter((item) => item.url?.includes("video"))
+  const docHtml = parse(html)
+
+  const videos = docHtml.querySelectorAll("article")
+
+  // const html = await page.$$eval("article", (elements) => {
+  //   return elements.map((element) => ({
+  //     title: element.querySelector(".card-title h2")?.textContent?.trim() ?? element.querySelector(".card-title h1")?.textContent?.trim() ?? null,
+  //     episode: Number(element.querySelector(".card-title span")?.textContent?.replace(/[^\d]/g, "") ?? 0
+  //     ),
+  //     url: element.querySelector("a")?.getAttribute("href") ?? "",
+  //     image: element.querySelector("img")?.getAttribute("src") ?? "",
+  //     description: element.querySelector("p")?.textContent ?? "",
+  //     views: 0,
+  //     createdAt: new Date().toISOString(),
+  //   }));
+  // });
+
+
+  const contentVideos = await Promise.all(
+    Array.from(videos).map(async (item: any) => {
+      const slug =
+        item.querySelector("a")?.getAttribute("href")
+
+      const properties = {
+        title: item.querySelector(".card-title h2")?.textContent?.trim() ?? item.querySelector(".card-title h1")?.textContent?.trim() ?? null,
+        episode: Number(item.querySelector(".card-title span")?.textContent?.replace(/[^\d]/g, "") ?? 0
+        ),
+        url: item.querySelector("a")?.getAttribute("href") ?? "",
+        image: item.querySelector("img")?.getAttribute("src") ?? "",
+        description: item.querySelector("p")?.textContent ?? "",
+        views: 0,
+        createdAt: new Date().toISOString(),
+      }
+
+
+      return properties
+    })
+  )
+
+  // await browser.close();
+
+  const result = contentVideos.filter((item) => item.url?.includes("video"))
 
   // const videos = docHtml.querySelectorAll("article")
 

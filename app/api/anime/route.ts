@@ -10,7 +10,7 @@ export async function GET() {
       "--single-process",
       "--no-zygote",
     ],
-    executablePath: process.env.NODE_ENV === "production" ? "/usr/bin/google-chrome" : puppeteer.executablePath(),
+    executablePath: process.env.NODE_ENV === "production" ? "/usr/bin/google-chrome-stable" : puppeteer.executablePath(),
     headless: "new",
   });
 

@@ -1,42 +1,128 @@
 "use client"
 
-import { siteConfig } from "@/config/site"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { siteConfig } from "@/config/site"
+import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { Input } from './ui/input'
-import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 
-interface SiteHeaderFormProps {
-  search: string
-}
+import { useSearch } from '@/lib/hooks/use-search'
+
 
 export function SiteHeader() {
-  const { register, handleSubmit } = useForm<SiteHeaderFormProps>()
+  const { delayFocusSearch, focusSearch, isLoading, register, searchResult, setFocusSearch, setSearch, search } = useSearch()
+
+  const pathname = usePathname()
   const { push } = useRouter()
 
-  const goToSearch = (data: SiteHeaderFormProps) => {
-    const { search } = data
-
-    if (search) {
-      push(`/anime/${search}`)
-    }
-  }
-
-
   return (
-    <header className="sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background ">
-      <div className="flex h-16 w-full max-w-screen-xl items-center space-x-4 sm:justify-between sm:space-x-0">
-        <MainNav items={siteConfig.mainNav} />
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center gap-4">
-            <form onSubmit={handleSubmit(goToSearch)}>
-              <Input {...register('search')} className='h-8' placeholder="Search..." />
-            </form>
-            <ThemeToggle />
-          </nav>
+    <>
+      <header className={`${focusSearch ? "block" : "sticky"} top-0 z-40 flex w-full items-center justify-center border-b bg-background `}>
+        <div className="flex h-24 w-full max-w-screen-lg flex-col items-center justify-center gap-1 sm:h-16 sm:flex-row sm:justify-between sm:gap-4">
+          <MainNav />
+
+          <div className='flex w-full items-center justify-center'>
+            {siteConfig.mainNav?.length ? (
+              <nav className=" hidden gap-6 sm:flex">
+                {siteConfig.mainNav?.map(
+                  (item, index) =>
+                    item.href && (
+                      <Link
+                        key={index}
+                        href={item.href}
+                        className={cn(
+                          "flex items-center rounded-sm border border-transparent px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-border active:scale-95",
+                          item.disabled && "cursor-not-allowed opacity-80",
+                          pathname === item.href && "bg-border"
+                        )}
+                      >
+                        {item.title}
+                      </Link>
+                    )
+                )}
+              </nav>
+            ) : null}
+          </div>
+          <div className="relative flex w-10/12 items-center justify-center space-x-4 sm:justify-end ">
+            <nav className="flex w-full items-center gap-4 sm:justify-between">
+              <div className='w-full max-w-xs'>
+                <div className='relative flex items-center'>
+                  <Input
+                    {...register('search')}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onFocus={() => setFocusSearch(true)} onBlur={() => searchResult && setTimeout(() => {
+                      setFocusSearch(false)
+                    }, 150)} className='h-8 rounded-full' placeholder="Search..."
+                  />
+                  {isLoading && <Loader2 className='absolute right-0 mr-2 h-4 w-4 animate-spin' />}
+                </div>
+                {(searchResult?.data?.length > 0 && focusSearch || delayFocusSearch) &&
+                  <motion.div
+                    initial={{ maxHeight: 0 }}
+                    animate={{ maxHeight: focusSearch ? '85vh' : 0, }}
+                    className='absolute top-12 flex w-full flex-col gap-2 overflow-scroll rounded-b-sm border-x border-b bg-background px-4 sm:right-0 sm:top-12 sm:max-h-screen sm:w-96'>
+                    {
+                      searchResult?.data?.length > 0 && searchResult?.data.map((item) => (
+                        <div key={item.mal_id} className='group flex w-full cursor-pointer justify-between gap-2 rounded-sm first-of-type:mt-4 last-of-type:mb-4 hover:bg-border/30' >
+                          <Image
+                            src={item.images.jpg.image_url}
+                            alt={item.title}
+                            width={64}
+                            height={64}
+                            className='h-12 w-12 rounded-sm object-cover transition-all duration-300 group-hover:h-20'
+                          />
+                          <div className='flex-1'>
+                            <h2 className='text-xs font-bold transition-all duration-300 group-hover:text-sm'>{item.title}</h2>
+                            <p className='hidden text-xs opacity-0 transition-all duration-300 group-hover:block group-hover:opacity-50'>{item.type}, {item.episodes} eps, scored {item.score}</p>
+                            <p className='text-xs opacity-50'>({item.type}, {item.year ?? new Date(item.aired.from).getFullYear() ?? item.aired.prop.from.year})</p>
+                          </div>
+                        </div>
+                      ))
+                    }
+                    {
+                      searchResult.haveMore && <button
+                        onClick={() => {
+                          push(`/anime?search=${search}`)
+                        }}
+                        className='sticky bottom-0 w-full border-t bg-background p-2 text-xs font-medium text-foreground hover:bg-muted active:scale-95'
+                      >
+                        Load more
+                      </button>
+                    }
+                  </motion.div>}
+              </div>
+              <ThemeToggle />
+            </nav>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <footer className="fixed bottom-0 z-20 w-full border-t border-border bg-background sm:hidden">
+        <div className="mx-auto flex max-w-screen-lg items-center justify-around px-4 py-1">
+          {siteConfig.mainNav?.map(
+            (item, index) =>
+              item.href && (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className={cn(
+                    "flex flex-col items-center gap-1 rounded-sm border border-transparent px-4 py-2 text-xs font-medium text-foreground transition-all hover:border-border active:scale-95",
+                    item.disabled && "cursor-not-allowed opacity-80",
+                    pathname === item.href && "bg-border"
+                  )}
+                >
+                  {item.icon}
+                  {item.title}
+                </Link>
+              )
+          )}
+        </div>
+      </footer>
+    </>
   )
 }

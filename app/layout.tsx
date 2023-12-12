@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SearchProvider } from '@/lib/hooks/use-search'
+import Providers from '@/components/providers'
 
 export const metadata: Metadata = {
   title: {
@@ -36,17 +38,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "min-h-screen bg-popover font-sans text-foreground antialiased",
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-            </div>
-            <TailwindIndicator />
-          </ThemeProvider>
+          <Providers>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <div className="relative flex min-h-screen flex-col justify-between">
+                <SiteHeader />
+                <div >{children}</div>
+              </div>
+              <TailwindIndicator />
+            </ThemeProvider>
+          </Providers>
         </body>
       </html>
     </>

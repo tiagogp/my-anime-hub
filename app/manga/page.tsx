@@ -30,6 +30,4 @@ export default async function IndexPage({ searchParams }: Params) {
       </section>
     )
   }
-
-
 }

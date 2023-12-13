@@ -19,7 +19,7 @@ interface Params {
 
 export default async function IndexPage({ searchParams }: Params) {
   if (searchParams.search) {
-    const correctPage = Number(searchParams.page) === 0 ? 1 : Number(searchParams.page)
+    const correctPage = !searchParams.page || Number(searchParams.page) === 0 ? 1 : Number(searchParams.page)
 
     const havePage = Number(searchParams.page) ? `&page=${correctPage}` : ""
     const { data } = await api.get(
@@ -55,13 +55,13 @@ export default async function IndexPage({ searchParams }: Params) {
               key={item.mal_id}
             />
           ))}
-          <div className="flex justify-center gap-2 p-4">
+          <div className="flex flex-wrap justify-center gap-2 p-4">
             <button
               className="disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={data.pagination.current_page === 1}
+              disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
             >
               <Link
-                className="flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border"
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=1`}
               >
                 <ChevronsLeft size={12} />
@@ -69,10 +69,10 @@ export default async function IndexPage({ searchParams }: Params) {
             </button>
             <button
               className="disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={data.pagination.current_page === 1}
+              disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
             >
               <Link
-                className="flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border"
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=${data.pagination.current_page - 1
                   }`}
               >
@@ -93,11 +93,11 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             ))}
             <button
-              className="disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!data.pagination.has_next_page}
             >
               <Link
-                className="flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border"
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=${data.pagination.current_page + 1
                   }`}
               >
@@ -105,11 +105,11 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             </button>
             <button
-              className="disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!data.pagination.has_next_page}
             >
               <Link
-                className="flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border"
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=${data.pagination.last_visible_page}`}
               >
                 <ChevronsRight size={12} />

@@ -30,7 +30,6 @@ export default async function IndexPage({ searchParams }: Params) {
     )
     const perPage = 10
 
-    ///dividir por igualmente por 10
     const results = pages.reduce((acc, _, index, array) => {
       if (index % perPage === 0) {
         acc.push(array.slice(index, index + perPage))
@@ -47,10 +46,10 @@ export default async function IndexPage({ searchParams }: Params) {
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border-x border-t bg-background pb-16 sm:flex-row sm:pb-0">
         <main className="flex-1">
-          {data.data.map((item: any, index: number) => (
+          {data?.data?.map((item: any, index: number) => (
             <CardHome
               {...item}
-              index={25 * (Number(searchParams.page) - 1) + index + 1}
+              index={25 * (Number(searchParams.page) > 0 ? Number(searchParams.page) - 1 : 0) + index + 1}
               key={item.mal_id}
             />
           ))}
@@ -78,7 +77,7 @@ export default async function IndexPage({ searchParams }: Params) {
                 <ChevronLeft size={12} />
               </Link>
             </button>
-            {result.map((page: number) => (
+            {result?.map((page: number) => (
               <Link
                 key={page}
                 href={`/anime?search=${searchParams.search}&page=${page}`}

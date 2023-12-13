@@ -1,10 +1,9 @@
-import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, FC, useContext, useEffect, useState } from 'react'
 import Cookies from 'cookies-js'
 import { useForm, UseFormRegister } from 'react-hook-form'
 import { useDebounce } from './use-debounce'
 import { api } from '@/config/api'
 import { DataSessionProps } from '@/config/services/seasons'
-import { useQuery } from '@tanstack/react-query'
 
 interface ISearchContext {
   setFocusSearch: (value: boolean) => void

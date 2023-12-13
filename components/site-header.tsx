@@ -38,7 +38,7 @@ export function SiteHeader() {
                         className={cn(
                           "flex items-center rounded-sm border border-transparent px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-border active:scale-95",
                           item.disabled && "cursor-not-allowed opacity-80",
-                          pathname === item.href && "bg-border"
+                          (!!item?.alternativePath ? pathname === item?.alternativePath : pathname === item.href) && "bg-border"
                         )}
                       >
                         {item.title}
@@ -65,7 +65,7 @@ export function SiteHeader() {
                   <motion.div
                     initial={{ maxHeight: 0 }}
                     animate={{ maxHeight: focusSearch ? '85vh' : 0, }}
-                    className='absolute top-12 flex w-full flex-col gap-2 overflow-scroll rounded-b-sm border-x border-b bg-background px-4 sm:right-0 sm:top-12 sm:max-h-screen sm:w-96'>
+                    className='absolute top-12 flex w-full flex-col gap-2 overflow-y-auto rounded-b-sm border-x border-b bg-background px-4 sm:right-0 sm:top-12 sm:max-h-screen sm:w-96'>
                     {
                       searchResult?.data?.length > 0 && searchResult?.data.map((item) => (
                         <div key={item.mal_id} className='group flex w-full cursor-pointer justify-between gap-2 rounded-sm first-of-type:mt-4 last-of-type:mb-4 hover:bg-border/30' >

@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SearchProvider } from '@/lib/hooks/use-search'
 import Providers from '@/components/providers'
 
 export const metadata: Metadata = {

@@ -9,19 +9,20 @@ export const siteConfig = {
   mainNav: [
     {
       icon: <HomeIcon size={20} />,
-      title: "Home",
+      title: "Anime",
       href: "/",
+      alternativePath: "/anime",
       disabled: false,
-    },
-    {
-      icon: <Users size={20} />,
-      title: "Comunidade",
-      href: "/community",
     },
     {
       icon: <BookOpenText size={20} />,
       title: "Manga",
       href: "/manga",
+    },
+    {
+      icon: <Users size={20} />,
+      title: "Comunidade",
+      href: "/community",
     },
   ],
   links: {

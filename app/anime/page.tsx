@@ -39,8 +39,6 @@ export default async function IndexPage({ searchParams }: Params) {
       return acc
     }, [] as number[][])
 
-    console.log(results)
-
     const actualpage = results.findIndex((page) =>
       page.includes(Number(correctPage))
     )

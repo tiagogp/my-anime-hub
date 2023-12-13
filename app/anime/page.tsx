@@ -19,7 +19,9 @@ interface Params {
 
 export default async function IndexPage({ searchParams }: Params) {
   if (searchParams.search) {
-    const havePage = searchParams.page ? `&page=${searchParams.page}` : ""
+    const correctPage = Number(searchParams.page) === 0 ? 1 : Number(searchParams.page)
+
+    const havePage = Number(searchParams.page) ? `&page=${correctPage}` : ""
     const { data } = await api.get(
       `/anime?q=${searchParams.search}${havePage}&sfw=true`
     )
@@ -37,8 +39,10 @@ export default async function IndexPage({ searchParams }: Params) {
       return acc
     }, [] as number[][])
 
+    console.log(results)
+
     const actualpage = results.findIndex((page) =>
-      page.includes(Number(searchParams.page))
+      page.includes(Number(correctPage))
     )
 
     const result = pages.length > perPage ? results[actualpage] : results[0]
@@ -49,7 +53,7 @@ export default async function IndexPage({ searchParams }: Params) {
           {data?.data?.map((item: any, index: number) => (
             <CardHome
               {...item}
-              index={25 * (Number(searchParams.page) > 0 ? Number(searchParams.page) - 1 : 0) + index + 1}
+              index={25 * (Number(correctPage) > 0 ? Number(correctPage) - 1 : 0) + index + 1}
               key={item.mal_id}
             />
           ))}
@@ -91,7 +95,7 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             ))}
             <button
-              className="disabled:cursor-not-allowed disabled:opacity-50"
+              className="disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!data.pagination.has_next_page}
             >
               <Link
@@ -103,7 +107,7 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             </button>
             <button
-              className="disabled:cursor-not-allowed disabled:opacity-50"
+              className="disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!data.pagination.has_next_page}
             >
               <Link

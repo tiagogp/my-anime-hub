@@ -12,17 +12,46 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Input } from './ui/input'
 
 import { useSearch } from '@/lib/hooks/use-search'
+import { useMediaQuery } from '@/lib/hooks/use-media-query'
+import { useEffect } from 'react'
 
 
 export function SiteHeader() {
   const { delayFocusSearch, focusSearch, isLoading, register, searchResult, setFocusSearch, setSearch, search } = useSearch()
+
+  const matches = useMediaQuery('(max-width: 480px)')
+
+  useEffect(() => {
+    if (!matches) {
+
+      const originalStyle: string = window.getComputedStyle(
+        document.body
+      ).overflow
+      document.body.style.overflow = "auto"
+
+
+      return () => (document.body.style.overflow = originalStyle)
+    }
+
+
+    const originalStyle: string = window.getComputedStyle(
+      document.body
+    ).overflow
+    document.body.style.overflow = focusSearch ? "hidden" : "auto"
+
+
+    return () => { (document.body.style.overflow = originalStyle) }
+
+
+  }, [matches, focusSearch])
+
 
   const pathname = usePathname()
   const { push } = useRouter()
 
   return (
     <>
-      <header className={`${focusSearch ? "block" : "sticky"} top-0 z-40 flex w-full items-center justify-center border-b bg-background `}>
+      <header className={`sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background `}>
         <div className="flex h-24 w-full max-w-screen-lg flex-col items-center justify-center gap-1 sm:h-16 sm:flex-row sm:justify-between sm:gap-4">
           <MainNav />
 
@@ -64,8 +93,8 @@ export function SiteHeader() {
                 {(searchResult?.data?.length > 0 && focusSearch || delayFocusSearch) &&
                   <motion.div
                     initial={{ maxHeight: 0 }}
-                    animate={{ maxHeight: focusSearch ? '85vh' : 0, }}
-                    className='absolute top-12 flex w-full flex-col gap-2 overflow-y-auto rounded-b-sm border-x border-b bg-background px-4 sm:right-0 sm:top-12 sm:max-h-screen sm:w-96'>
+                    animate={{ maxHeight: focusSearch ? 'calc(100vh - 12rem)' : 0, }}
+                    className='absolute top-12 z-20 flex  w-full flex-col gap-2 overflow-y-auto rounded-b-sm border-x border-b bg-background px-4 sm:right-0 sm:top-12 sm:w-96'>
                     {
                       searchResult?.data?.length > 0 && searchResult?.data.map((item) => (
                         <div key={item.mal_id} className='group flex w-full cursor-pointer justify-between gap-2 rounded-sm first-of-type:mt-4 last-of-type:mb-4 hover:bg-border/30' >
@@ -95,6 +124,12 @@ export function SiteHeader() {
                       </button>
                     }
                   </motion.div>}
+                {matches && (searchResult?.data?.length > 0 && focusSearch || delayFocusSearch) &&
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: focusSearch ? 1 : 0 }}
+                    className='fixed inset-x-0 top-24 z-10 h-screen w-full bg-accent/50 backdrop-blur-sm'
+                  />}
               </div>
               <ThemeToggle />
             </nav>

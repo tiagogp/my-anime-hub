@@ -76,7 +76,7 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
 
     setValue('search', oldValueSearch)
     setSearchResult(oldValueSearchResult)
-  }, [])
+  }, [setValue])
 
   const setSearch = (value: string) => {
     Cookies.set('search', value)

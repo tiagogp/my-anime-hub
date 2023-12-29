@@ -1,5 +1,6 @@
 import { CardHome } from '@/components/card-home'
 import { getSessionNow, getSessionUpcoming } from '@/config/services/seasons'
+import Link from 'next/link'
 
 export default async function IndexPage() {
   const {
@@ -33,11 +34,11 @@ export default async function IndexPage() {
           ))
           }
 
-          <div className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
+          <Link href='/anime/top-airing' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
               More
             </h2>
-          </div>
+          </Link>
         </div>
         <div className='border'>
           <header className='sticky top-24 z-10 bg-border p-6  py-2  sm:top-16'>
@@ -53,11 +54,11 @@ export default async function IndexPage() {
               />
             ))
           }
-          <div className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
+          <Link href='/anime/top-upcoming' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
               More
             </h2>
-          </div>
+          </Link>
         </div>
       </aside>
     </section>

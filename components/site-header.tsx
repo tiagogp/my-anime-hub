@@ -86,9 +86,17 @@ export function SiteHeader() {
                     onChange={(e) => setSearch(e.target.value)}
                     onFocus={() => setFocusSearch(true)} onBlur={() => searchResult && setTimeout(() => {
                       setFocusSearch(false)
-                    }, 150)} className='h-8 rounded-full' placeholder="Search..."
+                    }, 150)} className='h-8 rounded-full pr-7' placeholder="Search..."
                   />
-                  {isLoading && <Loader2 className='absolute right-0 mr-2 h-4 w-4 animate-spin' />}
+                  {isLoading &&
+                    <motion.div
+                      className='absolute right-0 mr-2'
+                      initial={{ opacity: 0, translateX: 10 }}
+                      animate={{ opacity: 1, translateX: 0 }}
+                    >
+                      <Loader2 className='h-4 w-4 animate-spin text-primary' />
+                    </motion.div>
+                  }
                 </div>
                 {(searchResult?.data?.length > 0 && focusSearch || delayFocusSearch) &&
                   <motion.div
@@ -109,6 +117,8 @@ export function SiteHeader() {
                             <h2 className='text-xs font-bold transition-all duration-300 group-hover:text-sm'>{item.title}</h2>
                             <p className='hidden text-xs opacity-0 transition-all duration-300 group-hover:block group-hover:opacity-50'>{item.type}, {item.episodes} eps, scored {item.score}</p>
                             <p className='text-xs opacity-50'>({item.type}, {item.year ?? new Date(item.aired.from).getFullYear() ?? item.aired.prop.from.year})</p>
+                            <p className='hidden  text-xs opacity-0 group-hover:block group-hover:opacity-50'>{item.status}</p>
+                            <p className='text-xs opacity-50'>{item.genres.flatMap((genre) => genre.name).join(', ')}</p>
                           </div>
                         </div>
                       ))

@@ -52,8 +52,9 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
   useEffect(() => {
     const updateSearchResult = async () => {
       if (debouncedValue) {
-
-        const { data } = await api.get(`/anime?q=${debouncedValue}&limit=10`)
+        setIsLoading(true)
+        const { data } = await api.get(`/anime?q=${debouncedValue}&limit=10&sfw=true`)
+        setIsLoading(false)
         Cookies.set('search', debouncedValue)
         Cookies.set('searchResult', JSON.stringify({
           data: data.data.slice(0, 10),

@@ -64,7 +64,7 @@ export default async function IndexPage({ searchParams }: Params) {
           >
             <Link
               className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=1`}
+              href={`/anime/top-anime?page=1`}
             >
               <ChevronsLeft size={12} />
             </Link>
@@ -76,7 +76,7 @@ export default async function IndexPage({ searchParams }: Params) {
           >
             <Link
               className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=${data.pagination.current_page - 1
+              href={`/anime/top-anime?page=${data.pagination.current_page - 1
                 }`}
             >
               <ChevronLeft size={12} />
@@ -85,7 +85,7 @@ export default async function IndexPage({ searchParams }: Params) {
           {result?.map((page: number) => (
             <Link
               key={page}
-              href={`/anime/top-airing?page=${page}`}
+              href={`/anime/top-anime?page=${page}`}
             >
               <button
                 name={`page-${page}`}
@@ -103,7 +103,7 @@ export default async function IndexPage({ searchParams }: Params) {
           >
             <Link
               className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=${data.pagination.current_page + 1
+              href={`/anime/top-anime?page=${data.pagination.current_page + 1
                 }`}
             >
               <ChevronRight size={12} />
@@ -116,7 +116,7 @@ export default async function IndexPage({ searchParams }: Params) {
           >
             <Link
               className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=${data.pagination.last_visible_page}`}
+              href={`/anime/top-anime?page=${data.pagination.last_visible_page}`}
             >
               <ChevronsRight size={12} />
             </Link>

@@ -24,7 +24,7 @@ export default async function IndexPage({ searchParams }: Params) {
 
   const havePage = Number(searchParams.page) ? `&page=${correctPage}` : ""
   const { data } = await api.get(
-    `/seasons/now?sfw=true${havePage}`
+    `/top/anime?sfw=true${havePage}`
   )
 
   const pages = Array.from(

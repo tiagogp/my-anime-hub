@@ -57,6 +57,7 @@ export default async function IndexPage({ searchParams }: Params) {
           ))}
           <div className="flex flex-wrap justify-center gap-2 p-4">
             <button
+              name='initial-page'
               className="disabled:cursor-not-allowed disabled:opacity-50"
               disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
             >
@@ -68,6 +69,7 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             </button>
             <button
+              name='previous-page'
               className="disabled:cursor-not-allowed disabled:opacity-50"
               disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
             >
@@ -85,6 +87,7 @@ export default async function IndexPage({ searchParams }: Params) {
                 href={`/anime?search=${searchParams.search}&page=${page}`}
               >
                 <button
+                  name={`page-${page}`}
                   className={`${data.pagination.current_page === page ? "bg-border" : ""
                     } flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
                 >
@@ -93,6 +96,7 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             ))}
             <button
+              name='next-page'
               className="disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!data.pagination.has_next_page}
             >
@@ -105,6 +109,7 @@ export default async function IndexPage({ searchParams }: Params) {
               </Link>
             </button>
             <button
+              name='last-page'
               className="disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!data.pagination.has_next_page}
             >

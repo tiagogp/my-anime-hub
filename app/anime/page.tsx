@@ -8,6 +8,7 @@ import Link from "next/link"
 
 import { CardHome } from "@/components/card-home"
 import { api } from "@/config/api"
+import { notFound } from 'next/navigation'
 
 interface Params {
   params: {}
@@ -125,4 +126,6 @@ export default async function IndexPage({ searchParams }: Params) {
       </section>
     )
   }
+
+  return notFound()
 }

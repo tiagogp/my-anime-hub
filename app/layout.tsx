@@ -1,5 +1,5 @@
 import "@/styles/globals.css"
-import { Metadata } from "next"
+import { Metadata, Viewport } from "next"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -8,7 +8,11 @@ import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 import Providers from '@/components/providers'
-import Head from 'next/head'
+
+export const viewport: Viewport = {
+  themeColor: 'black',
+}
+
 
 export const metadata: Metadata = {
   title: {
@@ -16,10 +20,6 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
@@ -35,10 +35,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <Head>
-          <title>{siteConfig.name}</title>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        </Head>
+        <head />
         <body
           className={cn(
             "min-h-screen bg-popover font-sans text-foreground antialiased",

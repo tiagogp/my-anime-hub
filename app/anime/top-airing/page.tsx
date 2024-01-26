@@ -8,8 +8,6 @@ import Link from "next/link"
 
 import { CardHome } from "@/components/card-home"
 import { api } from "@/config/api"
-import { Viewport } from 'next'
-
 interface Params {
   params: {}
   searchParams: {

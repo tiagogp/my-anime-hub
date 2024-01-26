@@ -3,36 +3,20 @@ import { getSessionNow, getSessionUpcoming } from '@/config/services/seasons'
 import { getTopAnime } from '@/config/services/top'
 import Link from 'next/link'
 
-export default async function IndexPage() {
-  const {
-    data: seasonNow,
-  } = await getSessionNow({
-    limit: 10
-  })
+export default function IndexPage() {
 
-  const {
-    data: topAnime
-  } = await getTopAnime({
-    limit: 25
-  })
-
-  const {
-    data: seasonUpcoming,
-  } = await getSessionUpcoming({
-    limit: 10
-  })
 
 
   return (
     <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-y-6 rounded-t-lg border-x border-t bg-background pb-12 sm:flex-row sm:pb-0">
       <main className='flex-1 border-r'>
-        {topAnime?.map((item: any, index: number) => (
+        {/* {topAnime?.map((item: any, index: number) => (
           <CardHome
             {...item}
             index={++index}
             key={item.mal_id}
           />
-        ))}
+        ))} */}
         <Link href='/anime/top-anime' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
           <h2 className='text-sm font-bold'>
             More
@@ -45,14 +29,14 @@ export default async function IndexPage() {
             <h2 className='text-center font-bold '>Top Airing Anime</h2>
           </header>
 
-          {seasonNow.map((item, index) => (
+          {/* {seasonNow.map((item, index) => (
             <CardHome
               {...item}
               index={++index}
               key={item.mal_id}
             />
           ))
-          }
+          } */}
 
           <Link href='/anime/top-airing' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
@@ -65,7 +49,7 @@ export default async function IndexPage() {
             <h2 className='text-center font-bold'>Top Upcoming Anime</h2>
           </header>
 
-          {
+          {/* {
             seasonUpcoming.map((item, index) => (
               <CardHome
                 {...item}
@@ -73,7 +57,7 @@ export default async function IndexPage() {
                 key={item.mal_id}
               />
             ))
-          }
+          } */}
           <Link href='/anime/top-upcoming' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
               More

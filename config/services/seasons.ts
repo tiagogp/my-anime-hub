@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { api } from '../api'
+import { BASE_URL } from '../constants'
 
 export interface SessionsProps {
   pagination: Pagination
@@ -159,16 +160,24 @@ interface Params {
 
 export const getSessionNow = cache(async ({
   limit
-}: Params) => {
-  const { data } = await api.get(`/seasons/now${limit ? `?limit=${limit}` : ''}`)
+}: Params):
+  Promise<SessionsProps> => {
+  const response = await fetch(BASE_URL + `/seasons/now${limit ? `?limit=${limit}` : ''}`, {
+    method: 'GET',
+  });
 
-  return data as SessionsProps;
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return response.json();
 })
 
 export const getSessionUpcoming = cache(async ({
   limit
-}: Params) => {
-  const { data } = await api.get(`/seasons/upcoming${limit ? `?limit=${limit}` : ''}`)
+}: Params): Promise<SessionsProps> => {
+  const response = await fetch(BASE_URL + `/seasons/upcoming${limit ? `?limit=${limit}` : ''}`, {
+  })
 
-  return data as SessionsProps;
+  return response.json();
 })

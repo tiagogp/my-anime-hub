@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { api } from '../api'
+import { BASE_URL } from '../constants'
 
 interface Params {
   limit?: number
@@ -9,7 +10,9 @@ interface Params {
 export const getTopAnime = cache(async ({
   limit
 }: Params) => {
-  const { data } = await api.get(`/top/anime?sfw=true${limit ? `&limit=${limit}` : ''}`)
+  const response = await fetch(BASE_URL + `/top/anime?sfw=true${limit ? `&limit=${limit}` : ''}`, {
+    method: 'GET'
+  })
 
-  return data
+  return response.json()
 })

@@ -1,8 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
-
 import { Icons } from "@/components/icons"
 import { useRouter } from 'next/navigation'
 

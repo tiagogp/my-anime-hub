@@ -46,7 +46,7 @@ export default async function IndexPage({ searchParams }: Params) {
   const result = pages.length > perPage ? results[actualpage] : results[0]
 
   return (
-    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border-x border-t bg-background pb-16 sm:flex-row sm:pb-0">
+    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border bg-background pb-16 sm:flex-row sm:pb-0">
       <main className="flex-1">
         {data?.data?.map((item: any, index: number) => (
           <CardHome
@@ -89,7 +89,7 @@ export default async function IndexPage({ searchParams }: Params) {
               <button
                 name={`page-${page}`}
                 className={`${data.pagination.current_page === page ? "bg-border" : ""
-                  } flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                  } flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
               >
                 <p className="text-xs">{page}</p>
               </button>

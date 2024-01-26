@@ -47,7 +47,7 @@ export default async function IndexPage({ searchParams }: Params) {
   const result = pages.length > perPage ? results[actualpage] : results[0]
 
   return (
-    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border-x border-t bg-background pb-16 sm:flex-row sm:pb-0">
+    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border bg-background pb-16 sm:flex-row sm:pb-0">
       <main className="flex-1">
         {data?.data?.map((item: any, index: number) => (
           <CardHome
@@ -63,7 +63,7 @@ export default async function IndexPage({ searchParams }: Params) {
             disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
           >
             <Link
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
               href={`/anime/top-upcoming?page=1`}
             >
               <ChevronsLeft size={12} />
@@ -75,7 +75,7 @@ export default async function IndexPage({ searchParams }: Params) {
           >
             <Link
               aria-label='Previous page'
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
               href={`/anime/top-upcoming?page=${data.pagination.current_page - 1
                 }`}
             >
@@ -91,7 +91,7 @@ export default async function IndexPage({ searchParams }: Params) {
               <button
 
                 className={`${data.pagination.current_page === page ? "bg-border" : ""
-                  } flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                  } flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
               >
                 <p className="text-xs">{page}</p>
               </button>
@@ -103,7 +103,7 @@ export default async function IndexPage({ searchParams }: Params) {
           >
             <Link
               aria-label='Next page'
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
               href={`/anime/top-upcoming?page=${data.pagination.current_page + 1
                 }`}
             >
@@ -116,7 +116,7 @@ export default async function IndexPage({ searchParams }: Params) {
             disabled={!data.pagination.has_next_page}
           >
             <Link
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
               href={`/anime/top-upcoming?page=${data.pagination.last_visible_page}`}
             >
               <ChevronsRight size={12} />

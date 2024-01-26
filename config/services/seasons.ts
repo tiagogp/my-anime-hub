@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { api } from '../api'
 
 export interface SessionsProps {
@@ -156,18 +157,18 @@ interface Params {
   limit?: number
 }
 
-export const getSessionNow = async ({
+export const getSessionNow = cache(async ({
   limit
 }: Params) => {
   const { data } = await api.get(`/seasons/now${limit ? `?limit=${limit}` : ''}`)
 
   return data as SessionsProps;
-}
+})
 
-export const getSessionUpcoming = async ({
+export const getSessionUpcoming = cache(async ({
   limit
 }: Params) => {
   const { data } = await api.get(`/seasons/upcoming${limit ? `?limit=${limit}` : ''}`)
 
   return data as SessionsProps;
-}
+})

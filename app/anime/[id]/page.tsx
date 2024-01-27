@@ -1,30 +1,9 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight
-} from "lucide-react"
 import Link from "next/link"
 
-import { CardHome } from "@/components/card-home"
-import { api } from "@/config/api"
-import { notFound } from 'next/navigation'
 import { getAnimeById } from '@/config/services/anime'
 import Image from 'next/image'
-
-const Youtube = ({ id }: { id: string }) => {
-  return (
-    <iframe
-      width="560"
-      height="315"
-      src={`https://www.youtube.com/embed/${id}`}
-      title="YouTube video player"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowFullScreen
-    ></iframe>
-  )
-}
+import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 interface Params {
   params: {
@@ -131,15 +110,19 @@ export default async function IndexPage({ params }: Params) {
                   </div>
                 </div>
               </div>
-              {data.trailer.youtube_id && <iframe
-                width="560"
-                height="315"
-                src={`https://www.youtube.com/embed/${data.trailer.youtube_id}`}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                className="aspect-video size-full rounded-md outline outline-border sm:w-72"
-              />}
+              {data.trailer.youtube_id &&
+                <Suspense fallback={<div>Loading...</div>}>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src={`https://www.youtube.com/embed/${data.trailer.youtube_id}`}
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="aspect-video size-full rounded-md outline outline-border sm:w-72"
+                  />
+                </Suspense>
+              }
             </div>
 
             <div className='w-full text-sm text-foreground/70'>

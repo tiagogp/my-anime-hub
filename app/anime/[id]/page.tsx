@@ -16,8 +16,6 @@ export default async function IndexPage({ params }: Params) {
   if (params.id) {
     const { data } = await getAnimeById(params.id);
 
-    console.log(data)
-
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background p-4 pb-20 sm:pb-4">
         <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
@@ -110,14 +108,13 @@ export default async function IndexPage({ params }: Params) {
                   </div>
                 </div>
               </div>
-              {data.trailer.youtube_id &&
+              {data.trailer.embed_url &&
                 <Suspense fallback={<div>Loading...</div>}>
                   <iframe
                     width="560"
                     height="315"
-                    src={`https://www.youtube.com/embed/${data.trailer.youtube_id}`}
-                    title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    src={data.trailer.embed_url}
+                    allow="encrypted-media"
                     allowFullScreen
                     className="aspect-video size-full rounded-md outline outline-border sm:w-72"
                   />

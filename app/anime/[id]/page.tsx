@@ -37,6 +37,8 @@ export default async function IndexPage({ params }: Params) {
   if (params.id) {
     const { data } = await getAnimeById(params.id);
 
+    console.log(data)
+
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background p-4 pb-20 sm:pb-4">
         <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
@@ -68,7 +70,7 @@ export default async function IndexPage({ params }: Params) {
           </div>
 
           <div className='flex flex-1 flex-col items-start gap-x-4 gap-y-2 '>
-            <div className='flex w-full  gap-4'>
+            <div className='flex w-full flex-col gap-4 sm:flex-row'>
               <div className='flex w-full flex-col items-start justify-between gap-2 '>
                 <div>
                   <h1 className="text-xl font-bold">{data.title}</h1>
@@ -82,7 +84,7 @@ export default async function IndexPage({ params }: Params) {
                   <div className='flex flex-wrap gap-2'>
                     {
                       data.studios.map((studio: any) => (
-                        <Link target="_blank" className='rounded bg-foreground/10 px-2 py-1 text-xs' key={studio.mal_id} href={studio.url}>
+                        <Link target="_blank" className='rounded bg-foreground/10 px-2 py-1 text-xs font-semibold text-foreground/60' key={studio.mal_id} href={studio.url}>
                           <p key={studio.mal_id}>{studio.name}</p>
                         </Link>
                       ))
@@ -109,8 +111,8 @@ export default async function IndexPage({ params }: Params) {
 
                 <div className='flex w-full max-w-md items-center justify-between overflow-hidden rounded border'>
                   <div className='flex flex-col items-center justify-center bg-foreground/10 px-4 py-2'>
-                    <p className="rounded-sm bg-primary px-2 text-sm font-semibold text-foreground/70">Score</p>
-                    <p className="text-2xl font-bold text-foreground"> {data.score}</p>
+                    <p className="rounded-sm bg-primary/90 px-2 text-sm font-semibold text-white">Score</p>
+                    <p className="text-2xl font-bold text-foreground/80"> {data.score}</p>
                   </div>
 
                   <div className='flex max-w-sm flex-1 items-center justify-between px-4 text-foreground/70'>
@@ -136,7 +138,7 @@ export default async function IndexPage({ params }: Params) {
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
-                className="aspect-video h-full w-72 rounded border"
+                className="aspect-video size-full rounded-md outline outline-border sm:w-72"
               />}
             </div>
 
@@ -159,8 +161,6 @@ export default async function IndexPage({ params }: Params) {
           </div>
 
         </main>
-
-        <hr className="h-[1px] w-full bg-border " />
 
       </section>
     )

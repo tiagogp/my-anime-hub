@@ -1,5 +1,6 @@
 import { DataSessionProps } from '@/config/services/seasons';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FC } from 'react';
 
 interface CardHomeProps extends DataSessionProps {
@@ -20,7 +21,7 @@ export const CardHome: FC<CardHomeProps> = (
     members
   }
 ) => (
-  <div className='flex cursor-pointer gap-4 p-4 hover:bg-border/30'>
+  <Link href={`/anime/${mal_id}`} className='flex cursor-pointer gap-4 p-4 hover:bg-border/30'>
     <span className='font-bold'>
       {index}
     </span>
@@ -41,5 +42,5 @@ export const CardHome: FC<CardHomeProps> = (
         }).format(members)
       }</p>
     </div>
-  </div>
+  </Link>
 )

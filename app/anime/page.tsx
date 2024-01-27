@@ -15,6 +15,7 @@ interface Params {
   searchParams: {
     search?: string
     page?: string
+    id?: string
   }
 }
 

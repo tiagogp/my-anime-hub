@@ -1,6 +1,7 @@
 import { cache } from 'react'
 import { api } from '../api'
 import { BASE_URL } from '../constants'
+import { convertValuesToURLSearchParams } from '@/lib/utils'
 
 export interface SessionsProps {
   pagination: Pagination
@@ -155,29 +156,47 @@ export interface Theme {
 }
 
 interface Params {
-  limit?: number
+  sfw?: boolean
+  limit?: string
 }
 
 export const getSessionNow = cache(async ({
-  limit
+  limit,
+  sfw = true, ...props
 }: Params):
   Promise<SessionsProps> => {
-  const response = await fetch(BASE_URL + `/seasons/now${limit ? `?limit=${limit}` : ''}`, {
-    method: 'GET',
-  });
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
+  const params = {
+    limit,
+    sfw,
+    ...props
   }
+
+  const url = new URL(`${BASE_URL}/seasons/now`);
+
+  url.search = convertValuesToURLSearchParams(params)
+
+  const response = await fetch(url);
 
   return response.json();
 })
 
 export const getSessionUpcoming = cache(async ({
-  limit
+  limit,
+  sfw = true, ...props
 }: Params): Promise<SessionsProps> => {
-  const response = await fetch(BASE_URL + `/seasons/upcoming${limit ? `?limit=${limit}` : ''}`, {
-  })
+  const params = {
+    limit,
+    sfw,
+    ...props
+  }
+
+  const url = new URL(`${BASE_URL}/seasons/upcoming`);
+
+  url.search = convertValuesToURLSearchParams(params)
+
+  const response = await fetch(url)
 
   return response.json();
 })
+
+

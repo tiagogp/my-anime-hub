@@ -1,18 +1,28 @@
 import { cache } from 'react'
-import { api } from '../api'
 import { BASE_URL } from '../constants'
+import { convertValuesToURLSearchParams } from '@/lib/utils'
 
 interface Params {
-  limit?: number
+  limit?: string
+  sfw?: boolean
 }
 
-
 export const getTopAnime = cache(async ({
-  limit
+  limit,
+  sfw = true,
+  ...props
 }: Params) => {
-  const response = await fetch(BASE_URL + `/top/anime?sfw=true${limit ? `&limit=${limit}` : ''}`, {
-    method: 'GET'
-  })
+  const params = {
+    limit,
+    sfw,
+    ...props
+  }
+
+  const url = new URL(`${BASE_URL}/top/anime`);
+
+  url.search = convertValuesToURLSearchParams(params)
+
+  const response = await fetch(url)
 
   return response.json()
 })

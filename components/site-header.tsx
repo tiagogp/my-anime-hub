@@ -94,7 +94,7 @@ export function SiteHeader() {
                       initial={{ opacity: 0, translateX: 10 }}
                       animate={{ opacity: 1, translateX: 0 }}
                     >
-                      <Loader2 className='h-4 w-4 animate-spin text-primary' />
+                      <Loader2 className='size-4 animate-spin text-primary' />
                     </motion.div>
                   }
                 </div>
@@ -105,13 +105,15 @@ export function SiteHeader() {
                     className='absolute top-12 z-20 flex  w-full flex-col gap-2 overflow-y-auto rounded-b-sm border-x border-b bg-background px-4 sm:right-0 sm:top-12 sm:w-96'>
                     {
                       searchResult?.data?.length > 0 && searchResult?.data.map((item) => (
-                        <div key={item.mal_id} className='group flex w-full cursor-pointer justify-between gap-2 rounded-sm first-of-type:mt-4 last-of-type:mb-4 hover:bg-border/30' >
+                        <div key={item.mal_id}
+                          onClick={() => push(`/anime/${item.mal_id}`)}
+                          className='group flex w-full cursor-pointer justify-between gap-2 rounded-sm first-of-type:mt-4 last-of-type:mb-4 hover:bg-border/30' >
                           <Image
                             src={item.images.jpg.image_url}
                             alt={item.title}
                             width={64}
                             height={64}
-                            className='h-12 w-12 rounded-sm object-cover transition-all duration-300 group-hover:h-20'
+                            className='size-12 rounded-sm object-cover transition-all duration-300 group-hover:h-20'
                           />
                           <div className='flex-1'>
                             <h2 className='text-xs font-bold transition-all duration-300 group-hover:text-sm'>{item.title}</h2>
@@ -123,22 +125,22 @@ export function SiteHeader() {
                         </div>
                       ))
                     }
-                    {
-                      searchResult.haveMore && <button
-                        onClick={() => {
-                          push(`/anime?search=${search}`)
-                        }}
-                        className='sticky bottom-0 w-full border-t bg-background p-2 text-xs font-medium text-foreground hover:bg-muted active:scale-95'
-                      >
-                        Load more
-                      </button>
+                    {searchResult.haveMore && <button
+                      onClick={() => {
+                        push(`/anime?search=${search}`)
+                      }}
+                      className='sticky bottom-0 w-full border-t bg-background p-2 text-xs font-medium text-foreground hover:bg-muted active:scale-95'
+                    >
+                      Load more
+                    </button>
                     }
                   </motion.div>}
                 {matches && (searchResult?.data?.length > 0 && focusSearch || delayFocusSearch) &&
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: focusSearch ? 1 : 0 }}
-                    className='fixed inset-x-0 top-24 z-10 h-screen w-full bg-accent/50 backdrop-blur-sm'
+                    onClick={() => setFocusSearch(false)}
+                    className='fixed inset-x-0 top-24 z-10 h-screen w-full bg-foreground/5 backdrop-blur-sm'
                   />}
               </div>
               <ThemeToggle />
@@ -148,7 +150,7 @@ export function SiteHeader() {
       </header>
 
       <footer className="fixed bottom-0 z-20 w-full border-t border-border bg-background sm:hidden">
-        <div className="mx-auto flex max-w-screen-lg items-center justify-around px-4 py-1">
+        <div className="mx-auto flex max-w-screen-lg items-center justify-around px-4 py-2">
           {siteConfig.mainNav?.map(
             (item, index) =>
               item.href && (
@@ -156,7 +158,7 @@ export function SiteHeader() {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex flex-col items-center gap-1 rounded-sm border border-transparent px-4 py-2 text-xs font-medium text-foreground transition-all hover:border-border active:scale-95",
+                    "flex flex-col items-center gap-1 rounded-sm border border-transparent px-3 py-1 text-xs font-medium text-foreground transition-all hover:border-border active:scale-95",
                     item.disabled && "cursor-not-allowed opacity-80",
                     pathname === item.href && "bg-border"
                   )}

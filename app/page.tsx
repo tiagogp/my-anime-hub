@@ -9,24 +9,24 @@ export default async function IndexPage() {
   const {
     data: seasonNow,
   } = await getSessionNow({
-    limit: 10
+    limit: '10'
   })
 
   const {
     data: topAnime
   } = await getTopAnime({
-    limit: 25
+    limit: '25'
   })
 
   const {
     data: seasonUpcoming,
   } = await getSessionUpcoming({
-    limit: 10
+    limit: '10'
   })
 
 
   return (
-    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-y-6 rounded-t-lg border bg-background pb-12 sm:flex-row sm:pb-0">
+    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-y-6 rounded-t-lg border bg-background pb-16 sm:flex-row sm:pb-0">
       <main className='flex-1 border-r'>
         {topAnime?.map((item: any, index: number) => (
           <CardHome
@@ -35,7 +35,7 @@ export default async function IndexPage() {
             key={item.mal_id}
           />
         ))}
-        <Link href='/anime/top-anime' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
+        <Link href='/anime/top-anime' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30 sm:border-b-0'>
           <h2 className='text-sm font-bold'>
             More
           </h2>
@@ -53,8 +53,7 @@ export default async function IndexPage() {
               index={++index}
               key={item.mal_id}
             />
-          ))
-          }
+          ))}
 
           <Link href='/anime/top-airing' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
@@ -67,15 +66,14 @@ export default async function IndexPage() {
             <h2 className='text-center font-bold'>Top Upcoming Anime</h2>
           </header>
 
-          {
-            seasonUpcoming.map((item, index) => (
-              <CardHome
-                {...item}
-                index={++index}
-                key={item.mal_id}
-              />
-            ))
-          }
+          {seasonUpcoming.map((item, index) => (
+            <CardHome
+              {...item}
+              index={++index}
+              key={item.mal_id}
+            />
+          ))}
+
           <Link href='/anime/top-upcoming' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
               More

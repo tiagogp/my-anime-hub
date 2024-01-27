@@ -52,7 +52,7 @@ export default async function IndexPage({ params }: Params) {
             <div className='hidden flex-col gap-2 sm:flex'>
               <h3 className='w-48 font-bold text-foreground/70'>Genres</h3>
               <div className='flex flex-wrap gap-1'>
-                {data.genres.map((genre) => {
+                {data.genres.map((genre: any) => {
                   return (
                     <Link
                       href={`/genre/${genre.name}`}
@@ -93,7 +93,7 @@ export default async function IndexPage({ params }: Params) {
                 <div className='flex flex-col gap-2 sm:hidden'>
                   <h3 className='w-48 font-bold text-foreground/70'>Genres</h3>
                   <div className='flex flex-wrap gap-1'>
-                    {data.genres.map((genre) => {
+                    {data.genres.map((genre: any) => {
                       return (
                         <Link
                           href={`/genre/${genre.name}`}

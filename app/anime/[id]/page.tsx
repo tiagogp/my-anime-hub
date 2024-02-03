@@ -4,7 +4,6 @@ import { getAnimeById } from '@/config/services/anime'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Video } from '@/components/ui/video'
-import { Metadata, ResolvingMetadata } from 'next'
 
 interface Params {
   params: {
@@ -144,9 +143,7 @@ export default async function IndexPage({ params }: Params) {
                 {data.synopsis}
               </p>
             </div>
-
           </main>
-
         </section>
       </>
     )

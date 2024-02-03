@@ -17,7 +17,7 @@ export default async function IndexPage({ params }: Params) {
 
   if (params.id) {
     const { data } = await getAnimeById(params.id);
-    console.log(data.trailer)
+
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background p-4 pb-20 sm:pb-4">
         <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">

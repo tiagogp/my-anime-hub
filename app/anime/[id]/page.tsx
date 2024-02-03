@@ -11,11 +11,13 @@ interface Params {
   }
 }
 
+
+
 export default async function IndexPage({ params }: Params) {
 
   if (params.id) {
     const { data } = await getAnimeById(params.id);
-
+    console.log(data.trailer)
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background p-4 pb-20 sm:pb-4">
         <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
@@ -29,17 +31,16 @@ export default async function IndexPage({ params }: Params) {
               className="aspect-auto w-full rounded sm:w-56"
             />
             <div className='hidden flex-col gap-2 sm:flex'>
-              <h3 className='w-48 font-bold text-foreground/70'>Genres</h3>
+              <h1 className='w-48 font-bold text-foreground/70'>Genres</h1>
               <div className='flex flex-wrap gap-1'>
                 {data.genres.map((genre: any) => {
                   return (
-                    <Link
-                      href={`/genre/${genre.name}`}
+                    <button
                       key={genre.mal_id}
                       className="rounded-sm bg-foreground/10 px-1.5 py-0.5 text-xs font-bold text-foreground/70"
                     >
                       {genre.name}
-                    </Link>
+                    </button>
                   )
                 })}
               </div>
@@ -108,14 +109,14 @@ export default async function IndexPage({ params }: Params) {
                   </div>
                 </div>
               </div>
-              {data.trailer.embed_url &&
-                <iframe
-                  width="560"
-                  height="315"
-                  src={data.trailer.embed_url}
-                  allow="encrypted-media"
-                  allowFullScreen
-                  className="aspect-video size-full rounded-md outline outline-border sm:w-72"
+
+              {data.trailer.youtube_id &&
+                <Video
+                  wrapperClass='w-full overflow-hidden rounded-md flex justify-center items-center aspect-video bg-image bg-center bg-no-repeat bg-cover outline outline-border'
+                  iframeClass='size-full rounded-md outline outline-border aspect-video'
+                  playerClass=''
+                  id={data.trailer.youtube_id}
+                  title={data.title}
                 />
               }
             </div>
@@ -133,7 +134,7 @@ export default async function IndexPage({ params }: Params) {
               </p>
             </div>
 
-            <p className="text-xs text-foreground/50 ">
+            <p className="text-xs text-foreground/70 ">
               {data.synopsis}
             </p>
           </div>

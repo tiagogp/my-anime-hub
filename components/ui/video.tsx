@@ -1,19 +1,19 @@
-interface VideoProps {
-  url: string
-}
+"use client"
+
+import LiteYouTubeEmbed, {
+  LiteYouTubeProps
+} from 'react-lite-youtube-embed';
 
 export function Video({
-  url
-}: VideoProps) {
+  id,
+  title,
+  ...rest
+}: LiteYouTubeProps) {
   return (
-    <iframe
-      width="560"
-      height="315"
-      src={url}
-      allowFullScreen
-      loading='lazy'
-      className="aspect-video size-full rounded-md outline outline-border sm:w-72"
-      allow="accelerometer; no-autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    <LiteYouTubeEmbed
+      id={id}
+      title={title}
+      {...rest}
     />
   )
 }

@@ -51,7 +51,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className={`sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background `}>
+      <header className={`sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background`}>
         <div className="flex h-24 w-full max-w-screen-lg flex-col items-center justify-center gap-1 sm:h-16 sm:flex-row sm:justify-between sm:gap-4">
           <MainNav />
 

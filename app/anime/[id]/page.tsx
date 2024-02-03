@@ -71,17 +71,16 @@ export default async function IndexPage({ params }: Params) {
                 </div>
 
                 <div className='flex flex-col gap-2 sm:hidden'>
-                  <h3 className='w-48 font-bold text-foreground/70'>Genres</h3>
+                  <h1 className='w-48 font-bold text-foreground/70'>Genres</h1>
                   <div className='flex flex-wrap gap-1'>
                     {data.genres.map((genre: any) => {
                       return (
-                        <Link
-                          href={`/genre/${genre.name}`}
+                        <div
                           key={genre.mal_id}
                           className="rounded-sm bg-foreground/10 px-1.5 py-0.5 text-xs font-bold text-foreground/70"
                         >
                           {genre.name}
-                        </Link>
+                        </div>
                       )
                     })}
                   </div>

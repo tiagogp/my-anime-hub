@@ -9,7 +9,7 @@ export function MainNav() {
 
   return (
     <div className="flex gap-6 md:gap-10 ">
-      <button onClick={() => push('/')} className="flex items-center ">
+      <button name='home' onClick={() => push('/')} className="flex items-center ">
         <Icons.logo className="h-7" />
       </button>
     </div>

@@ -109,8 +109,13 @@ export default async function IndexPage({ params }: Params) {
                 </div>
               </div>
               {data.trailer.embed_url &&
-                <Video
-                  url={data.trailer.embed_url}
+                <iframe
+                  width="560"
+                  height="315"
+                  src={data.trailer.embed_url}
+                  allow="encrypted-media"
+                  allowFullScreen
+                  className="aspect-video size-full rounded-md outline outline-border sm:w-72"
                 />
               }
             </div>

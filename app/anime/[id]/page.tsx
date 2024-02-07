@@ -4,10 +4,39 @@ import { getAnimeById } from '@/config/services/anime'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Video } from '@/components/ui/video'
+import { motion } from 'framer-motion'
+import { SectionAnimated } from '@/components/ui/section-animated'
+import { Metadata, ResolvingMetadata } from 'next'
 
 interface Params {
   params: {
     id?: string
+  }
+}
+
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // fetch data
+  const { data } = await getAnimeById(params.id);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: data.title,
+    openGraph: {
+      images: [
+        data.images.webp.image_url,
+        ...previousImages
+      ]
+    },
   }
 }
 
@@ -26,8 +55,8 @@ export default async function IndexPage({ params }: Params) {
           className="absolute top-0 -z-10 h-svh w-full object-cover opacity-30 mix-blend-multiply blur-lg dark:opacity-30 dark:mix-blend-screen"
         />
 
-        <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/70 p-4 pb-20 backdrop-blur-lg sm:pb-4">
-
+        <SectionAnimated
+          className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/80 p-4 pb-20 backdrop-blur-lg sm:pb-4">
           <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
             <div className="flex flex-col gap-2 rounded-lg sm:w-56 ">
               <Image
@@ -97,13 +126,13 @@ export default async function IndexPage({ params }: Params) {
                   <div className='flex w-full max-w-md items-center justify-between overflow-hidden rounded border'>
                     <div className='flex flex-col items-center justify-center bg-foreground/10 px-4 py-2'>
                       <p className="rounded-sm bg-primary/90 px-2 text-sm font-semibold text-white">Score</p>
-                      <p className="text-2xl font-bold text-foreground/80"> {data.score}</p>
+                      <p className="text-2xl font-bold text-foreground/80"> {data.score ? data.score : 'N/A'}</p>
                     </div>
 
                     <div className='flex max-w-sm flex-1 items-center justify-between px-4 text-foreground/70'>
                       <div className='flex flex-col items-center '>
                         <p className='text-sm sm:text-base'>Ranked</p>
-                        <p className="text-sm font-bold sm:text-base">#{data.rank}</p>
+                        <p className="text-sm font-bold sm:text-base">#{data?.rank ? data.rank : 'N/A'}</p>
                       </div>
                       <div className='flex flex-col items-center '>
                         <p className='text-sm sm:text-base'>Popularity</p>
@@ -146,7 +175,7 @@ export default async function IndexPage({ params }: Params) {
               </p>
             </div>
           </main>
-        </section>
+        </SectionAnimated>
       </>
     )
   }

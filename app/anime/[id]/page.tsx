@@ -35,8 +35,11 @@ export async function generateMetadata(
       images: [
         data.images.webp.image_url,
         ...previousImages
-      ]
+      ],
+      tags: data.genres,
+      description: data.synopsis
     },
+
   }
 }
 

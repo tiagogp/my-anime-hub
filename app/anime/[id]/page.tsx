@@ -37,9 +37,8 @@ export async function generateMetadata(
         ...previousImages
       ],
       tags: data.genres,
-      description: data.synopsis
     },
-
+    description: data.synopsis,
   }
 }
 

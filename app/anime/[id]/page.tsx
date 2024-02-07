@@ -23,9 +23,10 @@ export default async function IndexPage({ params }: Params) {
           alt={data.title}
           width={224}
           height={300}
-          className="absolute top-0 -z-10 h-svh w-full rounded bg-repeat object-cover opacity-20 blur-sm"
+          className="absolute top-0 -z-10 h-svh w-full object-cover opacity-30 mix-blend-multiply blur-lg dark:opacity-30 dark:mix-blend-screen"
         />
-        <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background p-4 pb-20 sm:pb-4">
+
+        <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/70 p-4 pb-20 backdrop-blur-lg sm:pb-4">
 
           <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
             <div className="flex flex-col gap-2 rounded-lg sm:w-56 ">
@@ -36,6 +37,7 @@ export default async function IndexPage({ params }: Params) {
                 height={300}
                 className="aspect-auto w-full rounded sm:w-56"
               />
+
               <div className='hidden flex-col gap-2 sm:flex'>
                 <h1 className='w-48 font-bold text-foreground/70'>Genres</h1>
                 <div className='flex flex-wrap gap-1'>

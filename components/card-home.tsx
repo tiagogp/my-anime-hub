@@ -34,8 +34,8 @@ export const CardHome: FC<CardHomeProps> = (
     />
     <div>
       <h2 className='max-w-full text-sm font-bold'>{title}</h2>
-      <p className='text-xs opacity-50'>{type}, {episodes} eps, scored {score}</p>
-      <p className='text-xs opacity-50'>{
+      <p className='text-xs opacity-70'>{type}, {episodes} eps, scored {score}</p>
+      <p className='text-xs opacity-70'>{
         Intl.NumberFormat('en-US', {
           notation: 'compact',
           compactDisplay: 'short'

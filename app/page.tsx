@@ -37,7 +37,7 @@ export default async function IndexPage() {
         ))}
         <Link href='/anime/top-anime' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30 sm:border-b-0'>
           <h2 className='text-sm font-bold'>
-            More
+            More top anime
           </h2>
         </Link>
       </main>
@@ -57,7 +57,7 @@ export default async function IndexPage() {
 
           <Link href='/anime/top-airing' className='flex cursor-pointer items-center justify-center border-t py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
-              More
+              More top airing
             </h2>
           </Link>
         </div>
@@ -76,7 +76,7 @@ export default async function IndexPage() {
 
           <Link href='/anime/top-upcoming' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30'>
             <h2 className='text-sm font-bold'>
-              More
+              More top upcoming
             </h2>
           </Link>
         </div>

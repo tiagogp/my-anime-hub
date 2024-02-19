@@ -54,7 +54,7 @@ export default async function IndexPage({ params }: Params) {
           alt={data.title}
           width={224}
           height={300}
-          className="absolute top-0 -z-10 h-svh w-full object-cover opacity-30 mix-blend-multiply blur-lg dark:opacity-30 dark:mix-blend-screen"
+          className="absolute top-0 -z-10 h-svh w-full object-cover opacity-15 mix-blend-multiply blur-sm dark:opacity-10 dark:mix-blend-screen"
         />
 
         <SectionAnimated
@@ -66,7 +66,8 @@ export default async function IndexPage({ params }: Params) {
                 alt={data.title}
                 width={224}
                 height={300}
-                className="aspect-auto w-full rounded sm:w-56"
+                className="aspect-auto w-full rounded bg-background/80 object-cover sm:w-56"
+                priority
               />
 
               <div className='hidden flex-col gap-2 sm:flex'>

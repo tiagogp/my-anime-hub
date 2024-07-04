@@ -1,4 +1,4 @@
-import { BookOpenText, HomeIcon, Users } from 'lucide-react'
+import { BookOpenText, HomeIcon } from 'lucide-react'
 
 export type SiteConfig = typeof siteConfig
 
@@ -19,15 +19,10 @@ export const siteConfig = {
       title: "Manga",
       href: "/manga",
     },
-    {
-      icon: <Users size={20} />,
-      title: "Comunidade",
-      href: "/community",
-    },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
+    twitter: "https://twitter.com/tiagogp_exe",
+    github: "https://github.com/tiagogp-exe",
     docs: "https://ui.shadcn.com",
   },
 }

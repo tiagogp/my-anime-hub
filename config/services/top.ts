@@ -26,3 +26,24 @@ export const getTopAnime = cache(async ({
 
   return response.json()
 })
+
+export const getTopManga = cache(async ({
+  limit,
+  sfw = true,
+  ...props
+}: Params) => {
+  const params = {
+    limit,
+    sfw,
+    ...props
+  }
+
+  const url = new URL(`${BASE_URL}/top/manga`);
+
+  url.search = convertValuesToURLSearchParams(params)
+
+  const response = await fetch(url)
+
+  return response.json()
+
+})

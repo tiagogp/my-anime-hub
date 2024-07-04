@@ -1,12 +1,9 @@
-import Link from "next/link"
 
-import { getAnimeById } from '@/config/services/anime'
+import { SectionAnimated } from '@/components/ui/section-animated'
+import { getMangaById } from '@/config/services/manga'
+import { Metadata, ResolvingMetadata } from 'next'
 import Image from 'next/image'
 import { notFound, } from 'next/navigation'
-import { Video } from '@/components/ui/video'
-import { SectionAnimated } from '@/components/ui/section-animated'
-import { Metadata, ResolvingMetadata } from 'next'
-import { BackgroundImage } from '@/components/background-image'
 
 interface Params {
   params: {
@@ -24,7 +21,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // fetch data
-  const { data } = await getAnimeById(params.id);
+  const { data } = await getMangaById(params.id);
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -45,11 +42,23 @@ export async function generateMetadata(
 export default async function IndexPage({ params }: Params) {
 
   if (params.id) {
-    const { data } = await getAnimeById(params.id);
+    const { data } = await getMangaById(params.id);
+
+    const correctTitle = data.title_english.toLowerCase() === data.title.toLowerCase() ?
+      data.title_japanese.toLowerCase() === data.title.toLowerCase() ? null :
+        data.title_japanese
+      : data.title_english
 
     return (
       <>
-        <BackgroundImage alt={data.title} src={data.images.webp.large_image_url} />
+        <Image
+          src={data.images.webp.image_url}
+          alt={data.title}
+          width={224}
+          height={300}
+          className="absolute top-0 -z-10 h-svh w-full object-cover opacity-30 mix-blend-darken blur-md dark:opacity-90 dark:mix-blend-color-dodge "
+        />
+
         <SectionAnimated
           className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/80 p-4 pb-20 backdrop-blur-lg sm:pb-4">
           <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
@@ -83,16 +92,16 @@ export default async function IndexPage({ params }: Params) {
             <div className='flex flex-[3.5] flex-col items-start gap-x-4 gap-y-2 '>
               <div className='flex w-full flex-col gap-4 sm:flex-row'>
                 <div className='flex w-full flex-col items-start justify-between gap-2 '>
-                  <div>
+                  <div className='relative w-full'>
                     <h1 className="text-xl font-bold">{data.title}</h1>
-                    <h1 className="text-md font-bold text-foreground/70">{data.title_english}</h1>
+                    <h1 className="text-md font-bold text-foreground/70">{correctTitle}</h1>
                   </div>
 
                   <div className='flex items-center gap-2 '>
-                    <p className='text-sm text-foreground/70'>{
+                    {/* <p className='text-sm text-foreground/70'>{
                       data.studios.length > 0 ? "Studio" : "Studios"
-                    }</p>
-                    <div className='flex flex-wrap gap-2'>
+                    }</p> */}
+                    {/* <div className='flex flex-wrap gap-2'>
                       {
                         data.studios.map((studio: any) => (
                           <Link target="_blank" className='rounded bg-foreground/10 px-2 py-1 text-xs font-semibold text-foreground/60' key={studio.mal_id} href={studio.url}>
@@ -100,7 +109,7 @@ export default async function IndexPage({ params }: Params) {
                           </Link>
                         ))
                       }
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className='flex flex-col gap-2 sm:hidden'>
@@ -142,7 +151,7 @@ export default async function IndexPage({ params }: Params) {
                   </div>
                 </div>
 
-                {data.trailer.youtube_id &&
+                {/* {data.trailer.youtube_id &&
                   <Video
                     wrapperClass='w-full overflow-hidden rounded-md flex justify-center items-center aspect-video bg-image bg-center bg-no-repeat bg-cover outline outline-border'
                     iframeClass='size-full rounded-md outline outline-border aspect-video'
@@ -150,7 +159,7 @@ export default async function IndexPage({ params }: Params) {
                     id={data.trailer.youtube_id}
                     title={data.title}
                   />
-                }
+                } */}
               </div>
 
               <div className='w-full text-sm text-foreground/70'>

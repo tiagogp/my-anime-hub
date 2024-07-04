@@ -11,9 +11,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Input } from './ui/input'
 
-import { useSearch } from '@/lib/hooks/use-search'
 import { useMediaQuery } from '@/lib/hooks/use-media-query'
-import { useEffect } from 'react'
+import { useSearch } from '@/lib/hooks/use-search'
 
 
 export function SiteHeader() {
@@ -21,37 +20,12 @@ export function SiteHeader() {
 
   const matches = useMediaQuery('(max-width: 480px)')
 
-  useEffect(() => {
-    if (!matches) {
-
-      const originalStyle: string = window.getComputedStyle(
-        document.body
-      ).overflow
-      document.body.style.overflow = "auto"
-
-
-      return () => (document.body.style.overflow = originalStyle)
-    }
-
-
-    const originalStyle: string = window.getComputedStyle(
-      document.body
-    ).overflow
-    document.body.style.overflow = focusSearch ? "hidden" : "auto"
-
-
-    return () => { (document.body.style.overflow = originalStyle) }
-
-
-  }, [matches, focusSearch])
-
-
   const pathname = usePathname()
   const { push } = useRouter()
 
   return (
     <>
-      <header className={`sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background`}>
+      <header className={`sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background dark:bg-background/95`}>
         <div className="flex h-24 w-full max-w-screen-lg flex-col items-center justify-center gap-1 sm:h-16 sm:flex-row sm:justify-between sm:gap-4">
           <MainNav />
 
@@ -59,18 +33,18 @@ export function SiteHeader() {
             {siteConfig.mainNav?.length ? (
               <nav className=" hidden gap-6 sm:flex">
                 {siteConfig.mainNav?.map(
-                  (item, index) =>
-                    item.href && (
+                  ({ href, title, disabled, alternativePath }, index) =>
+                    href && (
                       <Link
                         key={index}
-                        href={item.href}
+                        href={href}
                         className={cn(
                           "flex items-center rounded-sm border border-transparent px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-border active:scale-95",
-                          item.disabled && "cursor-not-allowed opacity-80",
-                          (!!item?.alternativePath ? pathname === item?.alternativePath : pathname === item.href) && "bg-border"
+                          disabled && "cursor-not-allowed opacity-80",
+                          (alternativePath && pathname.includes(alternativePath) || pathname === href) && "bg-border"
                         )}
                       >
-                        {item.title}
+                        {title}
                       </Link>
                     )
                 )}
@@ -152,19 +126,19 @@ export function SiteHeader() {
       <footer className="fixed bottom-0 z-20 w-full border-t border-border bg-background sm:hidden">
         <div className="mx-auto flex max-w-screen-lg items-center justify-around px-4 py-2">
           {siteConfig.mainNav?.map(
-            (item, index) =>
-              item.href && (
+            ({ href, icon, title, alternativePath, disabled }, index) =>
+              href && (
                 <Link
                   key={index}
-                  href={item.href}
+                  href={href}
                   className={cn(
-                    "flex flex-col items-center gap-1 rounded-sm border border-transparent px-3 py-1 text-xs font-medium text-foreground transition-all hover:border-border active:scale-95",
-                    item.disabled && "cursor-not-allowed opacity-80",
-                    pathname === item.href && "bg-border"
+                    "flex flex-1 flex-col items-center gap-1 rounded-sm border border-transparent px-3 py-1 text-xs font-medium text-foreground transition-all hover:border-border active:scale-95",
+                    disabled && "cursor-not-allowed opacity-80",
+                    (alternativePath && pathname.includes(alternativePath) || pathname === href) && "bg-border"
                   )}
                 >
-                  {item.icon}
-                  {item.title}
+                  {icon}
+                  {title}
                 </Link>
               )
           )}

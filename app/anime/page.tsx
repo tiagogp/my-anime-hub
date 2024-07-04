@@ -2,7 +2,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight
+  ChevronsRight,
+  Github
 } from "lucide-react"
 import Link from "next/link"
 
@@ -64,7 +65,7 @@ export default async function IndexPage({ searchParams }: Params) {
               disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
             >
               <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=1`}
               >
                 <ChevronsLeft size={12} />
@@ -76,7 +77,7 @@ export default async function IndexPage({ searchParams }: Params) {
               disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
             >
               <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=${data.pagination.current_page - 1
                   }`}
               >
@@ -91,7 +92,7 @@ export default async function IndexPage({ searchParams }: Params) {
                 <button
                   name={`page-${page}`}
                   className={`${data.pagination.current_page === page ? "bg-border" : ""
-                    } flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                    } flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
                 >
                   <p className="text-xs">{page}</p>
                 </button>
@@ -103,7 +104,7 @@ export default async function IndexPage({ searchParams }: Params) {
               disabled={!data.pagination.has_next_page}
             >
               <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=${data.pagination.current_page + 1
                   }`}
               >
@@ -116,7 +117,7 @@ export default async function IndexPage({ searchParams }: Params) {
               disabled={!data.pagination.has_next_page}
             >
               <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
+                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
                 href={`/anime?search=${searchParams.search}&page=${data.pagination.last_visible_page}`}
               >
                 <ChevronsRight size={12} />

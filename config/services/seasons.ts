@@ -33,6 +33,7 @@ export interface DataSessionProps {
   popularity: number
   members: number
   favorites: number
+  chapters?: number
   synopsis: string
   background: any
   season: string

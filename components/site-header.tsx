@@ -37,7 +37,7 @@ export function SiteHeader() {
             {siteConfig.mainNav?.length ? (
               <nav className=" hidden gap-6 sm:flex">
                 {siteConfig.mainNav?.map(
-                  ({ href, title, disabled, alternativePath }, index) =>
+                  ({ href, title, disabled }, index) =>
                     href && (
                       <Link
                         key={index}
@@ -128,7 +128,7 @@ export function SiteHeader() {
       </header>
 
       <footer className="fixed bottom-0 z-20 w-full border-t border-border bg-background sm:hidden">
-        <div className="mx-auto flex max-w-screen-lg items-center justify-around px-4 py-2">
+        <div className="mx-auto flex max-w-screen-lg items-center justify-around gap-1 px-4 py-2">
           {siteConfig.mainNav?.map(
             ({ href, icon, title, alternativePath, disabled }, index) =>
               href && (
@@ -138,7 +138,7 @@ export function SiteHeader() {
                   className={cn(
                     "flex flex-1 flex-col items-center gap-1 rounded-sm border border-transparent px-3 py-1 text-xs font-medium text-foreground transition-all hover:border-border active:scale-95",
                     disabled && "cursor-not-allowed opacity-80",
-                    (alternativePath && pathname.includes(alternativePath) || pathname === href) && "bg-border"
+                    getActiveNavItemIndex(siteConfig.mainNav, correctedPath, pathname) === index && "bg-border"
                   )}
                 >
                   {icon}

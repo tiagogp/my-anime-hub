@@ -107,7 +107,7 @@ export function SiteHeader() {
                       onClick={() => {
                         push(`/anime?search=${search}`)
                       }}
-                      className='sticky bottom-0 w-full border-t bg-background p-2 text-xs font-medium text-foreground hover:bg-muted active:scale-95'
+                      className='sticky bottom-0 w-full border-t bg-background p-2 text-xs font-medium text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800'
                     >
                       Load more
                     </button>

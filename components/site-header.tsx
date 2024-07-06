@@ -3,7 +3,7 @@
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { siteConfig } from "@/config/site"
-import { cn } from '@/lib/utils'
+import { cn, getActiveNavItemIndex } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
@@ -23,6 +23,10 @@ export function SiteHeader() {
   const pathname = usePathname()
   const { push } = useRouter()
 
+  const currentPath = pathname as string
+
+  const correctedPath = currentPath.split('/').length > 1 ? currentPath.split('/').filter(item => item !== '')[0] : currentPath
+
   return (
     <>
       <header className={`sticky top-0 z-40 flex w-full items-center justify-center border-b bg-background dark:bg-background/95`}>
@@ -41,7 +45,7 @@ export function SiteHeader() {
                         className={cn(
                           "flex items-center rounded-sm border border-transparent px-4 py-2 text-sm font-medium text-foreground transition-all hover:border-border active:scale-95",
                           disabled && "cursor-not-allowed opacity-80",
-                          (alternativePath && pathname.includes(alternativePath) || pathname === href) && "bg-border"
+                          getActiveNavItemIndex(siteConfig.mainNav, correctedPath, pathname) === index && "bg-border"
                         )}
                       >
                         {title}
@@ -87,7 +91,7 @@ export function SiteHeader() {
                             alt={item.title}
                             width={64}
                             height={64}
-                            className='size-12 rounded-sm object-cover transition-all duration-300 group-hover:h-20'
+                            className='size-14 rounded-sm object-cover transition-all duration-300 group-hover:h-20'
                           />
                           <div className='flex-1'>
                             <h2 className='text-xs font-bold transition-all duration-300 group-hover:text-sm'>{item.title}</h2>

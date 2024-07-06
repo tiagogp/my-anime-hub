@@ -7,6 +7,7 @@ import { Video } from '@/components/ui/video'
 import { SectionAnimated } from '@/components/ui/section-animated'
 import { Metadata, ResolvingMetadata } from 'next'
 import { BackgroundImage } from '@/components/background-image'
+import { Footer } from '@/components/ui/footer'
 
 interface Params {
   params: {
@@ -171,6 +172,7 @@ export default async function IndexPage({ params }: Params) {
               </p>
             </div>
           </main>
+          <Footer />
         </SectionAnimated>
       </>
     )

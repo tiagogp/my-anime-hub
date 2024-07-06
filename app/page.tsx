@@ -1,4 +1,5 @@
 import { CardHome } from '@/components/card-home'
+import { Footer } from '@/components/ui/footer'
 import { getSessionNow, getSessionUpcoming } from '@/config/services/seasons'
 import { getTopAnime } from '@/config/services/top'
 import Link from 'next/link'
@@ -80,22 +81,7 @@ export default async function IndexPage() {
           </div>
         </aside>
       </section>
-      <div className='flex items-center justify-center py-4'>
-        <main className='w-full max-w-screen-lg'>
-          <span className='mx-2 text-sm opacity-70'>Built by{' '}
-            <Link href={'https://github.com/tiagogp-exe'}
-              className='underline hover:text-foreground/70'
-            >
-              Tiago Guimarães
-            </Link>. The source code is available on{' '}
-            <Link href={'https://github.com/tiagogp-exe/doc'}
-              className='underline hover:text-foreground/70'
-            >
-              GitHub
-            </Link>
-            .</span>
-        </main>
-      </div>
+      <Footer />
     </div>
   )
 }

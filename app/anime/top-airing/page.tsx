@@ -1,13 +1,8 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight
-} from "lucide-react"
-import Link from "next/link"
 
 import { CardHome } from "@/components/card-home"
+import { Pagination } from '@/components/ui/pagination'
 import { api } from "@/config/api"
+import { paginate } from '@/lib/utils'
 interface Params {
   params: {}
   searchParams: {
@@ -16,8 +11,10 @@ interface Params {
   }
 }
 
-export default async function IndexPage({ searchParams }: Params) {
 
+const perPage = 10
+
+export default async function IndexPage({ searchParams }: Params) {
 
   const correctPage = !searchParams.page || Number(searchParams.page) === 0 ? 1 : Number(searchParams.page)
 
@@ -26,24 +23,7 @@ export default async function IndexPage({ searchParams }: Params) {
     `/seasons/now?sfw=true${havePage}`
   )
 
-  const pages = Array.from(
-    { length: data.pagination.last_visible_page },
-    (_, i) => i + 1
-  )
-  const perPage = 10
-
-  const results = pages.reduce((acc, _, index, array) => {
-    if (index % perPage === 0) {
-      acc.push(array.slice(index, index + perPage))
-    }
-    return acc
-  }, [] as number[][])
-
-  const actualpage = results.findIndex((page) =>
-    page.includes(Number(correctPage))
-  )
-
-  const result = pages.length > perPage ? results[actualpage] : results[0]
+  const result = paginate(data.pagination.last_visible_page, correctPage, perPage);
 
   return (
     <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border bg-background pb-16 sm:flex-row sm:pb-0">
@@ -55,72 +35,15 @@ export default async function IndexPage({ searchParams }: Params) {
             key={item.mal_id}
           />
         ))}
-        <div className="flex flex-wrap justify-center gap-2 p-4">
-          <button
-            name='initial-page'
-            className="disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
-          >
-            <Link
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=1`}
-            >
-              <ChevronsLeft size={12} />
-            </Link>
-          </button>
-          <button
-            name="previous-page"
-            className="disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
-          >
-            <Link
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=${data.pagination.current_page - 1
-                }`}
-            >
-              <ChevronLeft size={12} />
-            </Link>
-          </button>
-          {result?.map((page: number) => (
-            <Link
-              key={page}
-              href={`/anime/top-airing?page=${page}`}
-            >
-              <button
-                name={`page-${page}`}
-                className={`${data.pagination.current_page === page ? "bg-border" : ""
-                  } flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-              >
-                <p className="text-xs">{page}</p>
-              </button>
-            </Link>
-          ))}
-          <button
-            name="next-page"
-            className="disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={!data.pagination.has_next_page}
-          >
-            <Link
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=${data.pagination.current_page + 1
-                }`}
-            >
-              <ChevronRight size={12} />
-            </Link>
-          </button>
-          <button
-            name="last-page"
-            className="disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={!data.pagination.has_next_page}
-          >
-            <Link
-              className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex h-8 w-8 items-center justify-center rounded-sm border hover:bg-border`}
-              href={`/anime/top-airing?page=${data.pagination.last_visible_page}`}
-            >
-              <ChevronsRight size={12} />
-            </Link>
-          </button>
-        </div>
+        <Pagination
+          data={result}
+          href='/anime/top-airing?page='
+          currentPage={data.pagination.current_page}
+          hasNextPage={data.pagination.has_next_page}
+          initialPage={`/anime/top-airing?page=1`}
+          lastPage={`/anime/top-airing?page=${data.pagination.last_visible_page}`}
+          nextPage={`/anime/top-airing?page=${data.pagination.current_page + 1}`}
+          previousPage={`/anime/top-airing?page=${data.pagination.current_page - 1}`} />
       </main>
     </section>
   )

@@ -1,15 +1,9 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Github
-} from "lucide-react"
-import Link from "next/link"
 
 import { CardHome } from "@/components/card-home"
+import { Pagination } from '@/components/ui/pagination'
 import { api } from "@/config/api"
-import { notFound } from 'next/navigation'
+import { paginate } from '@/lib/utils'
+import { redirect } from 'next/navigation'
 
 interface Params {
   params: {}
@@ -20,6 +14,8 @@ interface Params {
   }
 }
 
+const perPage = 10
+
 export default async function IndexPage({ searchParams }: Params) {
   if (searchParams.search) {
     const correctPage = !searchParams.page || Number(searchParams.page) === 0 ? 1 : Number(searchParams.page)
@@ -29,24 +25,7 @@ export default async function IndexPage({ searchParams }: Params) {
       `/anime?q=${searchParams.search}${havePage}&sfw=true`
     )
 
-    const pages = Array.from(
-      { length: data.pagination.last_visible_page },
-      (_, i) => i + 1
-    )
-    const perPage = 10
-
-    const results = pages.reduce((acc, _, index, array) => {
-      if (index % perPage === 0) {
-        acc.push(array.slice(index, index + perPage))
-      }
-      return acc
-    }, [] as number[][])
-
-    const actualpage = results.findIndex((page) =>
-      page.includes(Number(correctPage))
-    )
-
-    const result = pages.length > perPage ? results[actualpage] : results[0]
+    const result = paginate(data.pagination.last_visible_page, correctPage, perPage);
 
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border-x border-t bg-background pb-16 sm:flex-row sm:pb-0">
@@ -56,78 +35,22 @@ export default async function IndexPage({ searchParams }: Params) {
               {...item}
               index={25 * (Number(correctPage) > 0 ? Number(correctPage) - 1 : 0) + index + 1}
               key={item.mal_id}
+              link={'/anime'}
             />
           ))}
-          <div className="flex flex-wrap justify-center gap-2 p-4">
-            <button
-              name='initial-page'
-              className="disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
-            >
-              <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-                href={`/anime?search=${searchParams.search}&page=1`}
-              >
-                <ChevronsLeft size={12} />
-              </Link>
-            </button>
-            <button
-              name='previous-page'
-              className="disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={data.pagination.current_page === 1 || data.pagination.current_page === 0}
-            >
-              <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-                href={`/anime?search=${searchParams.search}&page=${data.pagination.current_page - 1
-                  }`}
-              >
-                <ChevronLeft size={12} />
-              </Link>
-            </button>
-            {result?.map((page: number) => (
-              <Link
-                key={page}
-                href={`/anime?search=${searchParams.search}&page=${page}`}
-              >
-                <button
-                  name={`page-${page}`}
-                  className={`${data.pagination.current_page === page ? "bg-border" : ""
-                    } flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-                >
-                  <p className="text-xs">{page}</p>
-                </button>
-              </Link>
-            ))}
-            <button
-              name='next-page'
-              className="disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={!data.pagination.has_next_page}
-            >
-              <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-                href={`/anime?search=${searchParams.search}&page=${data.pagination.current_page + 1
-                  }`}
-              >
-                <ChevronRight size={12} />
-              </Link>
-            </button>
-            <button
-              name='last-page'
-              className="disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={!data.pagination.has_next_page}
-            >
-              <Link
-                className={`${!data.pagination.has_next_page && 'pointer-events-none'} flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-                href={`/anime?search=${searchParams.search}&page=${data.pagination.last_visible_page}`}
-              >
-                <ChevronsRight size={12} />
-              </Link>
-            </button>
-          </div>
+          <Pagination
+            href='/anime/top-anime?page'
+            data={result}
+            currentPage={data.pagination.current_page}
+            hasNextPage={data.pagination.has_next_page}
+            initialPage={`/anime/top-anime?page=1`}
+            previousPage={`/anime?search=${searchParams.search}&page=${data.pagination.current_page - 1}`}
+            lastPage={`/anime?search=${searchParams.search}&page=${data.pagination.last_visible_page}`}
+            nextPage={`/anime?search=${searchParams.search}&page=${data.pagination.current_page + 1}`} />
         </main>
       </section>
     )
   }
 
-  return notFound()
+  return redirect('/anime/top-anime')
 }

@@ -1,7 +1,7 @@
-
-import { CardHome } from "@/components/card-home"
+import { CardHome } from '@/components/card-home'
+import { Footer } from '@/components/ui/footer'
 import { Pagination } from '@/components/ui/pagination'
-import { api } from "@/config/api"
+import { api } from '@/config/api'
 import { paginate } from '@/lib/utils'
 
 interface Params {
@@ -19,13 +19,13 @@ export default async function IndexPage({ searchParams }: Params) {
 
   const havePage = Number(searchParams.page) ? `&page=${correctPage}` : ""
   const { data } = await api.get(
-    `/seasons/upcoming?sfw=true${havePage}`
+    `/top/manga?sfw=true${havePage}`
   )
 
   const result = paginate(data.pagination.last_visible_page, correctPage, perPage);
 
-  return (
-    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border bg-background pb-16 sm:flex-row sm:pb-0">
+  return (<>
+    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-lg border bg-background pb-16 sm:flex-row sm:pb-0">
       <main className="flex-1">
         {data?.data?.map((item: any, index: number) => (
           <CardHome
@@ -36,15 +36,17 @@ export default async function IndexPage({ searchParams }: Params) {
         ))}
         <Pagination
           data={result}
-          href='/anime/top-upcoming?page='
+          href='/manga/top-manga?page='
           currentPage={data.pagination.current_page}
           hasNextPage={data.pagination.has_next_page}
-          initialPage={`/anime/top-upcoming?page=1`}
-          lastPage={`/anime/top-upcoming?page=${data.pagination.last_visible_page}`}
-          nextPage={`/anime/top-upcoming?page=${data.pagination.current_page + 1}`}
-          previousPage={`/anime/top-upcoming?page=${data.pagination.current_page - 1}`} />
+          initialPage={`/manga/top-manga?page=1`}
+          lastPage={`/manga/top-manga?page=${data.pagination.last_visible_page}`}
+          nextPage={`/manga/top-manga?page=${data.pagination.current_page + 1}`}
+          previousPage={`/manga/top-manga?page=${data.pagination.current_page - 1}`} />
       </main>
     </section>
+    <Footer />
+  </>
   )
 }
 

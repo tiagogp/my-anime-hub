@@ -1,4 +1,5 @@
 import { CardHome } from '@/components/card-home'
+import { Footer } from '@/components/ui/footer'
 import { getTopManga } from '@/config/services/top'
 import Link from 'next/link'
 
@@ -23,30 +24,14 @@ export default async function IndexPage() {
               className='group transition-all even:bg-border/40 hover:bg-border/50 even:hover:bg-border/70'
             />
           ))}
-          <Link href='/anime/top-anime' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30 sm:border-b-0'>
+          <Link href='/manga/top-manga' className='flex cursor-pointer items-center justify-center border-y py-2 hover:bg-border/30 sm:border-b-0'>
             <h2 className='text-sm font-bold'>
               More top mangas
             </h2>
           </Link>
         </main>
-
       </section>
-      <div className='flex items-center justify-center py-4'>
-        <main className='w-full max-w-screen-lg'>
-          <span className='mx-2 text-sm opacity-70'>Built by{' '}
-            <Link href={'https://github.com/tiagogp-exe'}
-              className='underline hover:text-foreground/70'
-            >
-              Tiago Guimarães
-            </Link>. The source code is available on{' '}
-            <Link href={'https://github.com/tiagogp-exe/doc'}
-              className='underline hover:text-foreground/70'
-            >
-              GitHub
-            </Link>
-            .</span>
-        </main>
-      </div>
+      <Footer />
     </div>
   )
 }

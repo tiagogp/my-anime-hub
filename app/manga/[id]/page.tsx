@@ -1,4 +1,5 @@
 
+import { Footer } from '@/components/ui/footer'
 import { SectionAnimated } from '@/components/ui/section-animated'
 import { getMangaById } from '@/config/services/manga'
 import { Metadata, ResolvingMetadata } from 'next'
@@ -96,22 +97,6 @@ export default async function IndexPage({ params }: Params) {
                     <h1 className="text-xl font-bold">{data.title}</h1>
                     <h1 className="text-md font-bold text-foreground/70">{correctTitle}</h1>
                   </div>
-
-                  <div className='flex items-center gap-2 '>
-                    {/* <p className='text-sm text-foreground/70'>{
-                      data.studios.length > 0 ? "Studio" : "Studios"
-                    }</p> */}
-                    {/* <div className='flex flex-wrap gap-2'>
-                      {
-                        data.studios.map((studio: any) => (
-                          <Link target="_blank" className='rounded bg-foreground/10 px-2 py-1 text-xs font-semibold text-foreground/60' key={studio.mal_id} href={studio.url}>
-                            <p key={studio.mal_id}>{studio.name}</p>
-                          </Link>
-                        ))
-                      }
-                    </div> */}
-                  </div>
-
                   <div className='flex flex-col gap-2 sm:hidden'>
                     <h1 className='w-48 font-bold text-foreground/70'>Genres</h1>
                     <div className='flex flex-wrap gap-1'>
@@ -150,16 +135,6 @@ export default async function IndexPage({ params }: Params) {
                     </div>
                   </div>
                 </div>
-
-                {/* {data.trailer.youtube_id &&
-                  <Video
-                    wrapperClass='w-full overflow-hidden rounded-md flex justify-center items-center aspect-video bg-image bg-center bg-no-repeat bg-cover outline outline-border'
-                    iframeClass='size-full rounded-md outline outline-border aspect-video'
-                    playerClass=''
-                    id={data.trailer.youtube_id}
-                    title={data.title}
-                  />
-                } */}
               </div>
 
               <div className='w-full text-sm text-foreground/70'>
@@ -180,6 +155,7 @@ export default async function IndexPage({ params }: Params) {
               </p>
             </div>
           </main>
+          <Footer />
         </SectionAnimated>
       </>
     )

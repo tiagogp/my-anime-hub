@@ -10,8 +10,8 @@ export const siteConfig = {
     {
       icon: <HomeIcon size={20} />,
       title: "Anime",
-      href: "/",
-      alternativePath: "/anime",
+      href: "/anime",
+      alternativePath: "/",
       disabled: false,
     },
     {

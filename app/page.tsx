@@ -23,7 +23,7 @@ export default async function IndexPage() {
   return (
     <div className='pb-16 sm:pb-0'>
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-y-6 rounded-lg border bg-background sm:flex-row">
-        <main className='flex-1 border-r'>
+        <main className='w-full border-r md:flex-1'>
           {topAnime.data?.map((item: any, index: number) => (
             <CardHome
               {...item}

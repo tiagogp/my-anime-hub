@@ -103,7 +103,7 @@ export function SiteHeader() {
                         </div>
                       ))
                     }
-                    {searchResult.haveMore && <button
+                    {searchResult?.haveMore && <button
                       onClick={() => {
                         push(`/anime?search=${search}`)
                       }}

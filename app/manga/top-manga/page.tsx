@@ -32,6 +32,7 @@ export default async function IndexPage({ searchParams }: Params) {
             {...item}
             index={25 * (Number(correctPage) > 0 ? Number(correctPage) - 1 : 0) + index + 1}
             key={item.mal_id}
+            link={'/manga'}
           />
         ))}
         <Pagination

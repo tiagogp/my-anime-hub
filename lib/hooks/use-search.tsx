@@ -73,7 +73,7 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const oldValueSearch = Cookies.get('search') ?? ''
-    const oldValueSearchResult = Cookies.get('searchResult') ? JSON.parse(localStorage.getItem('searchResult') ?? '') : []
+    const oldValueSearchResult = Cookies.get('searchResult') ? localStorage.getItem('searchResult') && JSON.parse(localStorage.getItem('searchResult') ?? '') : []
 
     setValue('search', oldValueSearch)
     setSearchResult(oldValueSearchResult)

@@ -21,10 +21,8 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // fetch data
   const { data } = await getMangaById(params.id);
 
-  // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
 
   return {
@@ -45,7 +43,7 @@ export default async function IndexPage({ params }: Params) {
   if (params.id) {
     const { data } = await getMangaById(params.id);
 
-    const correctTitle = data.title_english.toLowerCase() === data.title.toLowerCase() ?
+    const correctTitle = data.title_english?.toLowerCase() === data.title?.toLowerCase() ?
       data.title_japanese.toLowerCase() === data.title.toLowerCase() ? null :
         data.title_japanese
       : data.title_english
@@ -142,7 +140,10 @@ export default async function IndexPage({ params }: Params) {
                   <span className="font-normal"> {data.status}</span>
                 </p>
                 <p className="font-semibold">Episodes:
-                  <span className="font-normal"> {data.episodes}</span>
+                  <span className="font-normal"> {data.chapters}</span>
+                </p>
+                <p className="font-semibold">Volumes:
+                  <span className="font-normal">{data.volumes}</span>
                 </p>
 
                 <p className=" font-semibold">Type:

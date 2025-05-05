@@ -25,7 +25,7 @@ export const BackgroundImage = ({ src, alt }: BackgroundImageProps) => {
         width={224}
         height={300}
         onLoad={() => setIsLoaded(true)}
-        className="h-svh w-full object-cover mix-blend-darken "
+        className="h-svh w-full object-cover opacity-20 mix-blend-darken dark:opacity-90"
       />
     </motion.div>
   )

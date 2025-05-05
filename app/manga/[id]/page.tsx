@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { getMangaById } from "@/config/services/manga"
 import { Footer } from "@/components/ui/footer"
 import { SectionAnimated } from "@/components/ui/section-animated"
+import BackgroundImage from "@/components/background-image"
 
 interface Params {
   params: {
@@ -48,13 +49,12 @@ export default async function IndexPage({ params }: Params) {
 
     return (
       <>
-        {/* <Image
-          src={data.images.webp.image_url}
-          alt={data.title}
-          width={224}
-          height={300}
-          className="absolute top-0 -z-10 h-svh w-full object-cover opacity-30 mix-blend-darken blur-md dark:opacity-90 dark:mix-blend-color-dodge "
-        /> */}
+        {data.images.webp.large_image_url && (
+          <BackgroundImage
+            alt={data.title}
+            src={data.images.webp.large_image_url}
+          />
+        )}
 
         <SectionAnimated className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/80 p-4 pb-20 backdrop-blur-lg sm:pb-4">
           <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">

@@ -53,8 +53,6 @@ export default async function IndexPage({ params }: Params) {
   if (params.id) {
     const { data } = await getAnimeById(params.id)
 
-    console.log(data.images)
-
     return (
       <>
         {data.images.webp.large_image_url && (
@@ -104,7 +102,7 @@ export default async function IndexPage({ params }: Params) {
 
                   <div className="flex items-center gap-2 ">
                     <p className="text-sm text-foreground/70">
-                      {data.studios.length > 0 ? "Studio" : "Studios"}
+                      {data.studios.length > 0 ? "Studio" : "Studios"}:
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {data.studios.map((studio: any) => (

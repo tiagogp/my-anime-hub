@@ -1,9 +1,21 @@
-import { createContext, FC, useContext, useEffect, useState } from 'react'
-import Cookies from 'cookies-js'
-import { useForm, UseFormRegister } from 'react-hook-form'
-import { useDebounce } from './use-debounce'
-import { api } from '@/config/api'
-import { DataSessionProps } from '@/config/services/seasons'
+import {
+  FC,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from "react"
+import { usePathname } from "next/navigation"
+import Cookies from "cookies-js"
+import { UseFormRegister, useForm } from "react-hook-form"
+
+import { api } from "@/config/api"
+import { DataSessionProps } from "@/config/services/seasons"
+
+import { useDebounce } from "./use-debounce"
+import { useKeyboardShortcut } from "./use-keyboard-shortcut"
 
 interface ISearchContext {
   setFocusSearch: (value: boolean) => void
@@ -17,6 +29,7 @@ interface ISearchContext {
   register: UseFormRegister<FormData>
   setSearch: (value: string) => void
   search: string
+  inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
 const SearchContext = createContext<ISearchContext | null>(null)
@@ -38,55 +51,102 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
   const { setValue, watch, register } = useForm<FormData>()
   const [searchResult, setSearchResult] = useState<DataProps>({
     data: [],
-    haveMore: false
+    haveMore: false,
   })
   const [isLoading, setIsLoading] = useState(false)
   const [focusSearch, setFocusSearch] = useState(false)
-
+  const pathname = usePathname()
   const delayFocusSearch = useDebounce<boolean>(focusSearch, 500)
+  const isManga = pathname.includes("manga")
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const search = watch('search')
+  const correctInitialPathname = isManga ? `manga` : `anime`
+
+  const search = watch("search")
 
   const debouncedValue = useDebounce<string>(search, 500)
+
+  const COOKIES_KEYS = {
+    SEARCH: `search-${correctInitialPathname}`,
+    SEARCH_RESULT: `searchResult-${correctInitialPathname}`,
+  }
+
+  useKeyboardShortcut(["control", "k"], () => {
+    inputRef.current?.focus()
+  })
+
+  useKeyboardShortcut(["escape"], () => {
+    inputRef.current?.blur()
+
+    setFocusSearch(false)
+  })
 
   useEffect(() => {
     const updateSearchResult = async () => {
       if (debouncedValue) {
         setIsLoading(true)
-        const { data } = await api.get(`/anime?q=${debouncedValue}&limit=10&sfw=true`)
+        const { data } = await api.get(
+          `/${correctInitialPathname}?q=${debouncedValue}&limit=10&sfw=true`
+        )
         setIsLoading(false)
-        Cookies.set('search', debouncedValue)
-        Cookies.set('searchResult', JSON.stringify({
-          data: data.data.slice(0, 10),
-          haveMore: data.pagination.current_page < data.pagination.last_visible_page
-        }))
+        Cookies.set(COOKIES_KEYS.SEARCH, debouncedValue)
+        Cookies.set(
+          COOKIES_KEYS.SEARCH_RESULT,
+          JSON.stringify({
+            data: data.data.slice(0, 10),
+            haveMore:
+              data.pagination.current_page < data.pagination.last_visible_page,
+          })
+        )
+
+        console.log(data)
 
         setSearchResult({
           data: data.data.slice(0, 10),
-          haveMore: data.pagination.current_page < data.pagination.last_visible_page
+          haveMore:
+            data.pagination.current_page < data.pagination.last_visible_page,
         })
       }
     }
 
     updateSearchResult()
-  }, [debouncedValue])
+  }, [
+    COOKIES_KEYS.SEARCH,
+    COOKIES_KEYS.SEARCH_RESULT,
+    correctInitialPathname,
+    debouncedValue,
+  ])
 
   useEffect(() => {
-    const oldValueSearch = Cookies.get('search') ?? ''
-    const oldValueSearchResult = Cookies.get('searchResult') ? localStorage.getItem('searchResult') && JSON.parse(localStorage.getItem('searchResult') ?? '') : []
+    const oldValueSearch = Cookies.get(COOKIES_KEYS.SEARCH) ?? ""
+    const oldValueSearchResult = Cookies.get(COOKIES_KEYS.SEARCH_RESULT)
+      ? localStorage.getItem(COOKIES_KEYS.SEARCH_RESULT) &&
+        JSON.parse(localStorage.getItem(COOKIES_KEYS.SEARCH_RESULT) ?? "")
+      : []
 
-    setValue('search', oldValueSearch)
+    setValue("search", oldValueSearch)
     setSearchResult(oldValueSearchResult)
-  }, [setValue])
+  }, [COOKIES_KEYS.SEARCH, COOKIES_KEYS.SEARCH_RESULT, setValue])
 
   const setSearch = (value: string) => {
-    Cookies.set('search', value)
-    setValue('search', value)
+    Cookies.set(COOKIES_KEYS.SEARCH, value)
+    setValue("search", value)
   }
 
   return (
     <SearchContext.Provider
-      value={{ setFocusSearch, focusSearch, delayFocusSearch, isLoading, searchResult, setSearch, search, register }}>
+      value={{
+        setFocusSearch,
+        focusSearch,
+        delayFocusSearch,
+        isLoading,
+        searchResult,
+        setSearch,
+        search,
+        register,
+        inputRef,
+      }}
+    >
       {children}
     </SearchContext.Provider>
   )
@@ -95,7 +155,7 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
 export const useSearch = (): ISearchContext => {
   const context = useContext(SearchContext)
   if (!context) {
-    throw new Error('useSearch must be used with SearchProvider')
+    throw new Error("useSearch must be used with SearchProvider")
   }
 
   return context

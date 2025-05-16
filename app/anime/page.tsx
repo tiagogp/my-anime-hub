@@ -1,12 +1,12 @@
+import { redirect } from "next/navigation"
 
-import { CardHome } from "@/components/card-home"
-import { Pagination } from '@/components/ui/pagination'
 import { api } from "@/config/api"
-import { paginate } from '@/lib/utils'
-import { redirect } from 'next/navigation'
+import { PAGES_LENGTH } from "@/lib/constants"
+import { getCurrentPage, paginate } from "@/lib/utils"
+import { Pagination } from "@/components/ui/pagination"
+import { CardHome } from "@/components/card-home"
 
 interface Params {
-  params: {}
   searchParams: {
     search?: string
     page?: string
@@ -14,18 +14,20 @@ interface Params {
   }
 }
 
-const perPage = 10
-
 export default async function IndexPage({ searchParams }: Params) {
   if (searchParams.search) {
-    const correctPage = !searchParams.page || Number(searchParams.page) === 0 ? 1 : Number(searchParams.page)
+    const currentPage = getCurrentPage(searchParams.page)
 
-    const havePage = Number(searchParams.page) ? `&page=${correctPage}` : ""
+    const havePage = Number(searchParams.page) ? `&page=${currentPage}` : ""
     const { data } = await api.get(
       `/anime?q=${searchParams.search}${havePage}&sfw=true`
     )
 
-    const result = paginate(data.pagination.last_visible_page, correctPage, perPage);
+    const result = paginate(
+      data.pagination.last_visible_page,
+      currentPage,
+      PAGES_LENGTH
+    )
 
     return (
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border-x border-t bg-background pb-16 sm:flex-row sm:pb-0">
@@ -33,24 +35,34 @@ export default async function IndexPage({ searchParams }: Params) {
           {data?.data?.map((item: any, index: number) => (
             <CardHome
               {...item}
-              index={25 * (Number(correctPage) > 0 ? Number(correctPage) - 1 : 0) + index + 1}
+              index={
+                25 * (Number(currentPage) > 0 ? Number(currentPage) - 1 : 0) +
+                index +
+                1
+              }
               key={item.mal_id}
-              link={'/anime'}
+              link={"/anime"}
             />
           ))}
           <Pagination
-            href='/anime/top-anime?page'
+            href="/anime?page="
             data={result}
+            search={searchParams.search}
             currentPage={data.pagination.current_page}
             hasNextPage={data.pagination.has_next_page}
-            initialPage={`/anime/top-anime?page=1`}
-            previousPage={`/anime?search=${searchParams.search}&page=${data.pagination.current_page - 1}`}
+            initialPage={`/anime/?page=1`}
+            previousPage={`/anime?search=${searchParams.search}&page=${
+              data.pagination.current_page - 1
+            }`}
             lastPage={`/anime?search=${searchParams.search}&page=${data.pagination.last_visible_page}`}
-            nextPage={`/anime?search=${searchParams.search}&page=${data.pagination.current_page + 1}`} />
+            nextPage={`/anime?search=${searchParams.search}&page=${
+              data.pagination.current_page + 1
+            }`}
+          />
         </main>
       </section>
     )
   }
 
-  return redirect('/anime/top-anime')
+  return redirect("/anime/top-anime")
 }

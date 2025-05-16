@@ -1,56 +1,89 @@
-import { type ClassValue, clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+
+import { BASE_URL } from "@/config/constants"
+import type { DataSessionProps, SessionsProps } from "@/config/services/seasons"
+
+import { PAGES_LENGTH } from "./constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
 export function convertValuesToURLSearchParams(params: any) {
-  const urlSearchParams = new URLSearchParams();
+  const urlSearchParams = new URLSearchParams()
   Object.entries(params).forEach(([key, value]) => {
-    urlSearchParams.append(key, value as string);
-  });
+    urlSearchParams.append(key, value as string)
+  })
 
-  return urlSearchParams.toString();
+  return urlSearchParams.toString()
 }
 
-export function paginate(dataLength: number, correctPage: number, perPage = 10) {
-  const pages = Array.from(
-    { length: dataLength },
-    (_, i) => i + 1
-  );
+export function paginate(
+  dataLength: number,
+  correctPage: number,
+  perPage = PAGES_LENGTH
+) {
+  const pages = Array.from({ length: dataLength }, (_, i) => i + 1)
 
   const results = pages.reduce((acc, _, index, array) => {
     if (index % perPage === 0) {
-      acc.push(array.slice(index, index + perPage));
+      acc.push(array.slice(index, index + perPage))
     }
-    return acc;
-  }, [] as number[][]);
+    return acc
+  }, [] as number[][])
 
   const actualPageIndex = results.findIndex((page) =>
     page.includes(Number(correctPage))
-  );
+  )
 
-  const result = pages.length > perPage ? results[actualPageIndex] : results[0];
+  const result = pages.length > perPage ? results[actualPageIndex] : results[0]
 
-  return result;
+  return result
 }
 
+export const formatterSessionUpcoming = (data: DataSessionProps[]) =>
+  data
+    .reduce((acc, cur) => {
+      const existOnAcc = acc.find((e) => e.title === cur.title)
+
+      if (existOnAcc) {
+        return acc
+      }
+
+      return [...acc, cur]
+    }, [] as DataSessionProps[])
+    .slice(0, 10)
+
+export const formatterUrl = (search?: string, page?: number) => {
+  const url = new URL(`${BASE_URL}/manga`)
+  const params = { search, page }
+
+  url.search = convertValuesToURLSearchParams(params)
+
+  return url.toString()
+}
+
+export const getCurrentPage = (page?: string) => Math.max(Number(page) || 1, 1)
 
 type NavItemsProps = {
-  icon: JSX.Element;
-  title: string;
-  href: string;
-  alternativePath?: string;
-  disabled?: boolean;
+  icon: JSX.Element
+  title: string
+  href: string
+  alternativePath?: string
+  disabled?: boolean
 }[]
 
-
-
-export const getActiveNavItemIndex = (navItems: NavItemsProps, correctedPath: string, pathname: string) => {
+export const getActiveNavItemIndex = (
+  navItems: NavItemsProps,
+  correctedPath: string,
+  pathname: string
+) => {
   const reduced = navItems.reduce((acc, item, index) => {
-    const corrected = item.href.split('/').length > 1 ? item.href.split('/').filter(item => item !== '')[0] : item.href
+    const corrected =
+      item.href.split("/").length > 1
+        ? item.href.split("/").filter((item) => item !== "")[0]
+        : item.href
 
     if (corrected === correctedPath) {
       acc = index
@@ -62,5 +95,5 @@ export const getActiveNavItemIndex = (navItems: NavItemsProps, correctedPath: st
     return acc
   }, 0)
 
-  return reduced;
-};
+  return reduced
+}

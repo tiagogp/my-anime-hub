@@ -99,8 +99,6 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
           })
         )
 
-        console.log(data)
-
         setSearchResult({
           data: data.data.slice(0, 10),
           haveMore:

@@ -42,7 +42,6 @@ export default async function IndexPage({ searchParams }: Params) {
             link={"/manga"}
             index={++index}
             key={item.mal_id}
-            className="group transition-all even:bg-border/40 hover:bg-border/50 even:hover:bg-border/70"
           />
         ))}
         <Pagination

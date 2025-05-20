@@ -25,8 +25,6 @@ export function useKeyboardShortcut(
 
       const currentCombo = pressedKeys.sort().join("+")
 
-      console.log(currentCombo, keyCombo)
-
       if (currentCombo === keyCombo) {
         e.preventDefault()
         callback()

@@ -30,7 +30,7 @@ export const CardHome: FC<CardHomeProps> = ({
   <Link
     href={`${link}/${mal_id}`}
     className={cn(
-      "flex cursor-pointer gap-4 p-4 hover:bg-border/30",
+      "flex cursor-pointer gap-4 border-b p-4 last-of-type:border-b hover:bg-border/30",
       className
     )}
   >

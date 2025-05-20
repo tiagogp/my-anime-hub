@@ -24,25 +24,14 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // fetch data
   const { data } = await getAnimeById(params.id)
 
-  // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
 
   return {
     title: data.title,
     openGraph: {
-      images: [
-        {
-          url: data.images.webp.image_url,
-          secureUrl: data.images.webp.image_url,
-          width: 1200,
-          height: 630,
-          type: "image/webp",
-          alt: data.title,
-        },
-      ],
+      images: [data.images.webp.image_url, ...previousImages],
       tags: data.genres,
     },
     description: data.synopsis,

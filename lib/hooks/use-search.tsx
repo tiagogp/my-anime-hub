@@ -12,7 +12,7 @@ import Cookies from "cookies-js"
 import { UseFormRegister, useForm } from "react-hook-form"
 
 import { api } from "@/config/api"
-import { DataSessionProps } from "@/config/services/seasons"
+import type { DataSessionProps } from "@/config/services/types"
 
 import { useDebounce } from "./use-debounce"
 import { useKeyboardShortcut } from "./use-keyboard-shortcut"

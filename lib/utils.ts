@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { BASE_URL } from "@/config/constants"
-import type { DataSessionProps, SessionsProps } from "@/config/services/seasons"
+import type { DataSessionProps } from "@/config/services/types"
 
 import { PAGES_LENGTH } from "./constants"
 
@@ -42,7 +42,10 @@ export function paginate(
   return result
 }
 
-export const formatterSessionUpcoming = (data: DataSessionProps[]) =>
+export const formatterSessionUpcoming = (
+  data: DataSessionProps[],
+  slice?: number
+) =>
   data
     .reduce((acc, cur) => {
       const existOnAcc = acc.find((e) => e.title === cur.title)
@@ -53,7 +56,7 @@ export const formatterSessionUpcoming = (data: DataSessionProps[]) =>
 
       return [...acc, cur]
     }, [] as DataSessionProps[])
-    .slice(0, 10)
+    .slice(0, slice || 10)
 
 export const formatterUrl = (search?: string, page?: number) => {
   const url = new URL(`${BASE_URL}/manga`)

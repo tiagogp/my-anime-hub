@@ -11,7 +11,7 @@ export const revalidate = 3600
 export default async function IndexPage() {
   const [seasonNow, topAnime, seasonUpcoming] = await Promise.all([
     getSessionNow({
-      limit: "10",
+      limit: "20",
     }),
     getTopAnime({
       limit: "25",
@@ -21,13 +21,16 @@ export default async function IndexPage() {
     }),
   ])
 
+  const formattedSessionNow = formatterSessionUpcoming(seasonNow.data)
+  const formattedAllTopAnime = formatterSessionUpcoming(topAnime.data, 26)
+
   const formattedSessionUpcoming = formatterSessionUpcoming(seasonUpcoming.data)
 
   return (
     <div className="pb-16 sm:pb-0">
       <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-y-6 rounded-lg border bg-background sm:flex-row">
         <main className="w-full border-r md:flex-1">
-          {topAnime.data?.map((item: any, index: number) => (
+          {formattedAllTopAnime?.map((item, index) => (
             <CardHome
               {...item}
               link={"/anime"}
@@ -48,7 +51,7 @@ export default async function IndexPage() {
               <h2 className="text-center font-bold ">Top Airing Anime</h2>
             </header>
 
-            {seasonNow.data.map((item, index) => (
+            {formattedSessionNow.map((item, index) => (
               <CardHome
                 {...item}
                 link={"/anime"}

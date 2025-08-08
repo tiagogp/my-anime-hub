@@ -3,7 +3,7 @@ import { cache } from "react"
 import { convertValuesToURLSearchParams } from "@/lib/utils"
 
 import { BASE_URL } from "../constants"
-import type { SessionsProps } from "./seasons"
+import type { SessionsProps } from "./types"
 
 interface Params {
   limit?: string

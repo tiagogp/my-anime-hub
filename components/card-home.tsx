@@ -2,7 +2,7 @@ import { FC } from "react"
 import Image from "next/image"
 import Link from "next/link"
 
-import { DataSessionProps } from "@/config/services/seasons"
+import type { DataSessionProps } from "@/config/services/types"
 import { cn } from "@/lib/utils"
 
 interface CardHomeProps extends DataSessionProps {

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
 
+import type { Genre } from "@/config/services/types"
 import { siteConfig } from "@/config/site"
 import { useMediaQuery } from "@/lib/hooks/use-media-query"
 import { useSearch } from "@/lib/hooks/use-search"
@@ -160,7 +161,7 @@ export function SiteHeader() {
                             </p>
                             <p className="text-xs opacity-50">
                               {item.genres
-                                .flatMap((genre) => genre.name)
+                                .flatMap((genre: Genre) => genre.name)
                                 .join(", ")}
                             </p>
                           </div>

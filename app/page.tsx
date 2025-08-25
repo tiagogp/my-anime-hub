@@ -4,6 +4,7 @@ import { getSessionNow, getSessionUpcoming } from "@/config/services/seasons"
 import { getTopAnime } from "@/config/services/top"
 import { formatterSessionUpcoming } from "@/lib/utils"
 import { Footer } from "@/components/ui/footer"
+import Aurora from "@/components/aurora"
 import { CardHome } from "@/components/card-home"
 
 export const revalidate = 3600

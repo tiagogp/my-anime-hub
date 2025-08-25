@@ -56,7 +56,7 @@ export default async function IndexPage({ params }: Params) {
           />
         )}
 
-        <SectionAnimated className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/80 p-4 pb-20 backdrop-blur-lg sm:pb-4">
+        <SectionAnimated className="relative z-20  mx-auto mt-20 flex w-full max-w-screen-lg flex-col items-start gap-4 rounded-t-lg border bg-background/80 p-4 pb-20 backdrop-blur-lg sm:pb-4">
           <main className="flex w-full flex-col gap-2 sm:flex-row sm:gap-6">
             <div className="flex flex-1 flex-col gap-2 rounded-lg sm:w-56">
               <Image

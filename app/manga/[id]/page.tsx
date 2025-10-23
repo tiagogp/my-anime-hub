@@ -1,11 +1,11 @@
 import { Metadata, ResolvingMetadata } from "next"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { getMangaById } from "@/config/services/manga"
 import { Footer } from "@/components/ui/footer"
 import { SectionAnimated } from "@/components/ui/section-animated"
 import BackgroundImage from "@/components/background-image"
+import { Image } from "@/components/custom-image"
 
 interface Params {
   params: {
@@ -65,7 +65,6 @@ export default async function IndexPage({ params }: Params) {
                 width={224}
                 height={300}
                 className="aspect-auto w-full rounded bg-background/80 object-cover sm:w-56"
-                priority
               />
 
               <div className="hidden flex-col gap-2 sm:flex">

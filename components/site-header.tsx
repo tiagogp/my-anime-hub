@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
@@ -14,6 +13,7 @@ import { cn, getActiveNavItemIndex } from "@/lib/utils"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 
+import { Image } from "./custom-image"
 import { Input } from "./ui/input"
 
 export function SiteHeader() {

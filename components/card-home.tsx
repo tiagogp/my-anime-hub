@@ -1,9 +1,10 @@
 import { FC } from "react"
-import Image from "next/image"
 import Link from "next/link"
 
 import type { DataSessionProps } from "@/config/services/types"
 import { cn } from "@/lib/utils"
+
+import { Image } from "./custom-image"
 
 interface CardHomeProps extends DataSessionProps {
   index: number

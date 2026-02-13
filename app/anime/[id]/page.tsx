@@ -164,10 +164,8 @@ export default async function IndexPage({ params }: Params) {
                 {videoId && (
                   <Video
                     wrapperClass="w-full rounded-md flex justify-center items-center aspect-video relative bg-image bg-center bg-no-repeat bg-cover outline outline-border"
-                    iframeClass="size-full rounded-md outline outline-border aspect-video relative -translate-x-0.5"
+                    iframeClass="size-full rounded-md outline outline-border aspect-video relative"
                     id={videoId}
-                    aspectHeight={90 * 5}
-                    aspectWidth={160 * 5}
                     title={data?.title ?? ""}
                   />
                 )}

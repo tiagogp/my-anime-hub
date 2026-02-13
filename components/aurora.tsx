@@ -118,6 +118,7 @@ interface AuroraProps {
   time?: number
   speed?: number
   imageURL: string
+  opacity?: number
 }
 
 export default function Aurora(props: AuroraProps) {
@@ -126,7 +127,13 @@ export default function Aurora(props: AuroraProps) {
 
   const colors = Object.values(palette) || ["#5227FF", "#7cff67", "#5227FF"]
 
-  const { colorStops = colors, amplitude = 1.0, blend = 0.5, imageURL } = props
+  const {
+    colorStops = colors,
+    amplitude = 1.0,
+    blend = 0.5,
+    imageURL,
+    opacity = 0.5,
+  } = props
   const propsRef = useRef<AuroraProps>(props)
   propsRef.current = props
 
@@ -231,8 +238,8 @@ export default function Aurora(props: AuroraProps) {
     <motion.div
       ref={ctnDom}
       initial={{ opacity: 0 }}
-      animate={{ opacity: isCorrectColor ? 0.5 : 0 }}
-      className="absolute bottom-0 z-10 min-h-screen w-full rotate-180"
+      animate={{ opacity: isCorrectColor ? opacity : 0 }}
+      className="absolute bottom-0 z-10 min-h-screen w-full rotate-180 mix-blend-color-burn dark:mix-blend-difference"
     />
   )
 }

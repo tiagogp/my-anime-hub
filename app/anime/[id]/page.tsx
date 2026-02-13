@@ -82,7 +82,7 @@ export default async function IndexPage({ params }: Params) {
             </div>
 
             <div className="flex flex-[3.5] flex-col items-start gap-x-4 gap-y-2 ">
-              <div className="flex w-full flex-col gap-4 sm:flex-row">
+              <div className="flex w-full flex-col flex-wrap gap-4 sm:flex-row md:flex-nowrap">
                 <div className="flex w-full flex-col items-start justify-between gap-2 ">
                   <div>
                     <h1 className="text-xl font-bold">{data.title}</h1>
@@ -161,14 +161,16 @@ export default async function IndexPage({ params }: Params) {
                   </div>
                 </div>
 
-                {videoId && (
-                  <Video
-                    wrapperClass="w-full rounded-md flex justify-center items-center aspect-video relative bg-image bg-center bg-no-repeat bg-cover outline outline-border"
-                    iframeClass="size-full rounded-md outline outline-border aspect-video relative"
-                    id={videoId}
-                    title={data?.title ?? ""}
-                  />
-                )}
+                <div className="w-full max-w-80">
+                  {videoId && (
+                    <Video
+                      wrapperClass="w-full rounded-md flex justify-center items-center aspect-video relative bg-image bg-center bg-no-repeat bg-cover outline outline-border"
+                      iframeClass="size-full rounded-md outline outline-border aspect-video relative"
+                      id={videoId}
+                      title={data?.title ?? ""}
+                    />
+                  )}
+                </div>
               </div>
 
               <div className="w-full text-sm text-foreground/70">

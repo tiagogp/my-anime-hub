@@ -194,7 +194,7 @@ export function SiteHeader() {
         </div>
       </header>
 
-      <footer className="fixed bottom-0 z-20 w-full border-t border-border bg-background sm:hidden">
+      <footer className="fixed bottom-0 z-30 w-full border-t border-border bg-background sm:hidden">
         <div className="mx-auto flex max-w-screen-lg items-center justify-around gap-1 px-4 py-2">
           {siteConfig.mainNav?.map(
             ({ href, icon, title, disabled }, index) =>

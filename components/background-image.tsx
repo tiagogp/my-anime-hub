@@ -18,7 +18,7 @@ export const BackgroundImage = ({ src, alt }: BackgroundImageProps) => {
 
   return (
     <>
-      <motion.div className="absolute bottom-0 z-20 min-h-screen w-full bg-gradient-to-b from-background/50 to-transparent dark:from-background/90" />
+      <motion.div className="absolute top-0 z-20 min-h-screen w-full bg-gradient-to-b from-background/50 to-transparent dark:from-background/85" />
 
       <Aurora
         opacity={opacity}
@@ -28,9 +28,9 @@ export const BackgroundImage = ({ src, alt }: BackgroundImageProps) => {
         imageURL={src}
       />
       <motion.div
-        initial={{ opacity: 0, filter: "blur(100px)" }}
-        animate={{ opacity: 1, filter: "blur(5px)" }}
-        transition={{ duration: 1.2 }}
+        initial={{ opacity: 0, filter: "blur(250px)" }}
+        animate={{ opacity: 1, filter: "blur(10px)" }}
+        transition={{ duration: 1.5 }}
         className="absolute top-0 -z-20 h-svh w-full"
       >
         <Image
@@ -38,7 +38,7 @@ export const BackgroundImage = ({ src, alt }: BackgroundImageProps) => {
           alt={alt}
           width={224}
           height={300}
-          className="h-svh w-full object-cover opacity-50 dark:opacity-25"
+          className="h-svh w-full object-cover opacity-50 dark:opacity-30"
         />
       </motion.div>
     </>

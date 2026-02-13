@@ -10,6 +10,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export const getYoutubeIdFromEmbedUrl = (url: string): string | null => {
+  if (!url) return null
+
+  const match = url.match(/embed\/([^?]+)/)
+
+  return match ? match[1] : null
+}
+
 export function convertValuesToURLSearchParams(params: any) {
   const urlSearchParams = new URLSearchParams()
   Object.entries(params).forEach(([key, value]) => {

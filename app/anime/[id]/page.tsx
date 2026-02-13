@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { getAnimeById } from "@/config/services/anime"
+import { getYoutubeIdFromEmbedUrl } from "@/lib/utils"
 import { Footer } from "@/components/ui/footer"
 import { SectionAnimated } from "@/components/ui/section-animated"
 import { Video } from "@/components/ui/video"
@@ -41,6 +42,8 @@ export async function generateMetadata(
 export default async function IndexPage({ params }: Params) {
   if (params.id) {
     const { data } = await getAnimeById(params.id)
+
+    const videoId = getYoutubeIdFromEmbedUrl(data.trailer.embed_url)
 
     return (
       <>
@@ -158,13 +161,14 @@ export default async function IndexPage({ params }: Params) {
                   </div>
                 </div>
 
-                {data.trailer.youtube_id && (
+                {videoId && (
                   <Video
-                    wrapperClass="w-full overflow-hidden rounded-md flex justify-center items-center aspect-video bg-image bg-center bg-no-repeat bg-cover outline outline-border"
-                    iframeClass="size-full rounded-md outline outline-border aspect-video"
-                    playerClass=""
-                    id={data.trailer.youtube_id}
-                    title={data.title}
+                    wrapperClass="w-full rounded-md flex justify-center items-center aspect-video relative bg-image bg-center bg-no-repeat bg-cover outline outline-border"
+                    iframeClass="size-full rounded-md outline outline-border aspect-video relative -translate-x-0.5"
+                    id={videoId}
+                    aspectHeight={90 * 5}
+                    aspectWidth={160 * 5}
+                    title={data?.title ?? ""}
                   />
                 )}
               </div>

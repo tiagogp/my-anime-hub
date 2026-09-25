@@ -1,11 +1,20 @@
 import Link from "next/link"
 
+import { SITE_DESCRIPTION, SITE_NAME } from "@/config/seo"
 import { getSessionNow, getSessionUpcoming } from "@/config/services/seasons"
 import { getTopAnime } from "@/config/services/top"
+import { absoluteUrl, pageMetadata } from "@/lib/seo"
 import { formatterSessionUpcoming } from "@/lib/utils"
 import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { CardHome } from "@/components/card-home"
 import { RandomButton } from "@/components/random-button"
+import { StructuredData } from "@/components/structured-data"
+
+export const metadata = pageMetadata({
+  title: "Discover Anime & Manga",
+  description: SITE_DESCRIPTION,
+  path: "/",
+})
 
 // Render at request time so build-time failures cannot freeze the home fallback.
 // Individual AniList queries retain their one-hour server cache.
@@ -70,6 +79,16 @@ export default async function IndexPage() {
 
   return (
     <div>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE_NAME,
+          url: absoluteUrl("/"),
+          description: SITE_DESCRIPTION,
+          inLanguage: "en",
+        }}
+      />
       <header className="mx-auto flex w-full max-w-content flex-col gap-4 px-4 pb-4 pt-20 sm:px-6 sm:pt-28">
         <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
           An anime &amp; manga catalog
@@ -90,6 +109,7 @@ export default async function IndexPage() {
             {formattedSessionNow.map((item, index) => (
               <CardHome
                 {...item}
+                headingLevel="h3"
                 link="/anime"
                 index={index + 1}
                 key={item.mal_id}
@@ -107,6 +127,7 @@ export default async function IndexPage() {
             {formattedSessionUpcoming.map((item, index) => (
               <CardHome
                 {...item}
+                headingLevel="h3"
                 link="/anime"
                 index={index + 1}
                 key={item.mal_id}
@@ -124,6 +145,7 @@ export default async function IndexPage() {
             {formattedTopAnime.map((item, index) => (
               <CardHome
                 {...item}
+                headingLevel="h3"
                 link="/anime"
                 index={index + 1}
                 key={item.mal_id}

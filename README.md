@@ -41,10 +41,20 @@ AniList's documented temporary limit is 30 requests/minute. Review the current
 [terms](https://docs.anilist.co/guide/terms-of-use) before publishing. The terms
 restrict competing list/tracker services. This project does not implement user lists.
 
+## SEO
+
+- The canonical production origin is `https://myanimehub.tiagogp.com`, configured in `config/seo.ts`.
+- Each catalog, ranking, schedule day, and title has its own metadata, canonical URL, and social preview. Paginated lists retain their page number; legacy numeric detail URLs canonicalize to the native AniList URL.
+- Internal searches and filtered lists use `noindex, follow`. Crawlers can still access them and follow their links. Vercel preview deployments are excluded from indexing.
+- `/sitemap.xml` includes the main pages and a deduplicated sample of top, airing, and upcoming titles, refreshed hourly. Other titles remain discoverable through catalog pagination. If AniList is unavailable, the sitemap retains the static pages.
+- `/robots.txt` advertises the sitemap. `/social-image` generates the default 1200×630 sharing image; detail pages use the title’s cover.
+- The home page includes WebSite structured data; detail pages include CreativeWork/Movie/TVSeries and breadcrumbs. No rating counts are invented.
+- After deployment, submit `https://myanimehub.tiagogp.com/sitemap.xml` in Google Search Console for the verified domain.
+
 ## Checks
 
 ```sh
-node --test tests/anilist.test.cjs
+node --test tests/*.test.cjs
 npm run typecheck
 npm run build
 ```

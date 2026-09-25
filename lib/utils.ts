@@ -66,7 +66,10 @@ export const formatterSessionUpcoming = (
     }, [] as DataSessionProps[])
     .slice(0, slice || 10)
 
-export const getCurrentPage = (page?: string) => Math.max(Number(page) || 1, 1)
+export const getCurrentPage = (page?: string) => {
+  const value = Number(page)
+  return Number.isSafeInteger(value) && value > 0 ? value : 1
+}
 
 type NavItemsProps = {
   icon: JSX.Element

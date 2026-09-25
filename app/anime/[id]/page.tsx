@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next"
+import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -9,6 +9,7 @@ import {
   getAnimeReviews,
   getAnimeStaff,
 } from "@/config/services/anime"
+import { mediaMetadata, mediaStructuredData } from "@/lib/seo"
 import { getYoutubeIdFromEmbedUrl } from "@/lib/utils"
 import { CategoryLabel } from "@/components/ui/category-label"
 import { Video } from "@/components/ui/video"
@@ -19,6 +20,7 @@ import { RelationsList } from "@/components/anime/relations-list"
 import { ReviewsList } from "@/components/anime/reviews-list"
 import { BackgroundImage } from "@/components/background-image"
 import { Image } from "@/components/custom-image"
+import { StructuredData } from "@/components/structured-data"
 
 interface Params {
   params: {
@@ -31,26 +33,10 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data } = await getAnimeById(params.id)
-
-  if (!data?.mal_id) {
-    return { title: "Anime not found" }
-  }
-
-  const previousImages = (await parent).openGraph?.images || []
-
-  return {
-    title: data.title,
-    openGraph: {
-      images: [data.images.webp.image_url, ...previousImages],
-      tags: data.genres?.map((genre) => genre.name),
-    },
-    description: data.synopsis,
-  }
+  if (!data) notFound()
+  return mediaMetadata(data, "anime")
 }
 
 interface DetailSectionProps {
@@ -94,6 +80,7 @@ export default async function IndexPage({ params }: Params) {
 
   return (
     <>
+      <StructuredData data={mediaStructuredData(data, "anime")} />
       {data.images.webp.large_image_url && (
         <BackgroundImage
           alt={data.title}
@@ -109,6 +96,8 @@ export default async function IndexPage({ params }: Params) {
               <Image
                 src={data.images.webp.large_image_url}
                 alt={data.title}
+                lazy={false}
+                fetchPriority="high"
                 width={224}
                 height={300}
                 className="absolute inset-0 size-full object-cover"
@@ -204,12 +193,7 @@ export default async function IndexPage({ params }: Params) {
 
             {videoId && (
               <div className="w-full max-w-sm">
-                <Video
-                  wrapperClass="w-full flex justify-center items-center aspect-video relative"
-                  iframeClass="size-full aspect-video relative"
-                  id={videoId}
-                  title={data?.title ?? ""}
-                />
+                <Video id={videoId} title={data?.title ?? ""} />
               </div>
             )}
           </div>

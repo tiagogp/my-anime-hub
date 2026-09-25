@@ -1,5 +1,10 @@
 import Link from "next/link"
 
+export const metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+}
+
 export default function NotFound() {
   return (
     <section className="mx-auto w-full max-w-content px-4 py-24 sm:px-6">

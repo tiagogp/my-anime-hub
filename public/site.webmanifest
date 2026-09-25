@@ -1,6 +1,6 @@
 {
-  "name": "Taxonomy",
-  "short_name": "Taxonomy",
+  "name": "MyAnimeHub",
+  "short_name": "MyAnimeHub",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +13,9 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#0d0d0d",
+  "background_color": "#0d0d0d",
+  "start_url": "/",
+  "lang": "en",
   "display": "standalone"
 }

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getAnimeGenres } from "@/config/services/genres"
 import { getAnime } from "@/config/services/top"
 import { PAGES_LENGTH } from "@/lib/constants"
+import { catalogMetadata } from "@/lib/seo"
 import { getCurrentPage, paginate } from "@/lib/utils"
 import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
@@ -21,6 +22,15 @@ interface Params {
     order_by?: string
     sort?: string
   }
+}
+
+export function generateMetadata({ searchParams }: Params) {
+  return catalogMetadata(
+    "/anime",
+    "Browse Anime",
+    "Explore anime by genre, format, status, and score. Find your next series or movie with the MyAnimeHub anime catalog.",
+    searchParams
+  )
 }
 
 export default async function IndexPage({ searchParams }: Params) {

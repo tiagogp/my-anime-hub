@@ -1,5 +1,6 @@
 import { getSessionUpcoming } from "@/config/services/seasons"
 import { PAGES_LENGTH } from "@/lib/constants"
+import { catalogMetadata } from "@/lib/seo"
 import { formatterSessionUpcoming, getCurrentPage, paginate } from "@/lib/utils"
 import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
@@ -11,6 +12,15 @@ interface Params {
     search?: string
     page?: string
   }
+}
+
+export function generateMetadata({ searchParams }: Params) {
+  return catalogMetadata(
+    "/anime/top-upcoming",
+    "Upcoming Anime",
+    "Explore upcoming anime series and movies, read synopses, and discover future releases to look forward to.",
+    searchParams
+  )
 }
 
 export default async function IndexPage({ searchParams }: Params) {

@@ -1,11 +1,12 @@
-import { BookOpenText, CalendarDays, HomeIcon } from 'lucide-react'
+import { BookOpenText, CalendarDays, HomeIcon } from "lucide-react"
+
+import { SITE_DESCRIPTION, SITE_NAME } from "./seo"
 
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "MyAnimeHub",
-  description:
-    "Anime database and community for anime fans. Discover, share, and discuss anime. Built with Radix UI and Next.js 13.",
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
   mainNav: [
     {
       icon: <HomeIcon size={20} />,

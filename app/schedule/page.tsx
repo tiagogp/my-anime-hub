@@ -5,6 +5,7 @@ import {
   getSchedules,
   type Weekday,
 } from "@/config/services/schedules"
+import { pageMetadata } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { CardHome } from "@/components/card-home"
@@ -21,6 +22,19 @@ const isWeekday = (value?: string): value is Weekday =>
 const todayWeekday = (): Weekday => {
   const index = new Date().getUTCDay()
   return WEEKDAYS[(index + 6) % 7]
+}
+
+export function generateMetadata({ searchParams }: Params) {
+  const day = isWeekday(searchParams.day) ? searchParams.day : undefined
+  const label = day
+    ? `${day[0].toUpperCase()}${day.slice(1)} Anime Schedule`
+    : "Weekly Anime Schedule"
+  return pageMetadata({
+    title: label,
+    description:
+      "Follow the weekly anime airing schedule in UTC. Browse each day’s releases and find series to watch on MyAnimeHub.",
+    path: day ? `/schedule?day=${day}` : "/schedule",
+  })
 }
 
 export default async function SchedulePage({ searchParams }: Params) {

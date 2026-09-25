@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getMangaGenres } from "@/config/services/genres"
 import { getManga } from "@/config/services/top"
 import { PAGES_LENGTH } from "@/lib/constants"
+import { catalogMetadata } from "@/lib/seo"
 import { getCurrentPage, paginate } from "@/lib/utils"
 import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
@@ -21,6 +22,15 @@ interface Params {
     order_by?: string
     sort?: string
   }
+}
+
+export function generateMetadata({ searchParams }: Params) {
+  return catalogMetadata(
+    "/manga",
+    "Browse Manga",
+    "Explore manga and novels by genre, format, status, and score. Discover your next read in the MyAnimeHub manga catalog.",
+    searchParams
+  )
 }
 
 export default async function IndexPage({ searchParams }: Params) {

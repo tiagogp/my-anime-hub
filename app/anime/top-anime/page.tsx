@@ -1,5 +1,6 @@
 import { getTopAnime } from "@/config/services/top"
 import { PAGES_LENGTH } from "@/lib/constants"
+import { catalogMetadata } from "@/lib/seo"
 import { getCurrentPage, paginate } from "@/lib/utils"
 import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
@@ -12,6 +13,15 @@ interface Params {
     search?: string
     page?: string
   }
+}
+
+export function generateMetadata({ searchParams }: Params) {
+  return catalogMetadata(
+    "/anime/top-anime",
+    "Top-Rated Anime",
+    "Discover top-rated anime series and movies, compare scores, and explore characters, synopses, and recommendations.",
+    searchParams
+  )
 }
 
 export default async function IndexPage({ searchParams }: Params) {

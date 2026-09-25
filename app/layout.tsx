@@ -1,6 +1,7 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
 
+import { IS_PREVIEW, SITE_URL } from "@/config/seo"
 import { siteConfig } from "@/config/site"
 import { fontDisplay, fontMono, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
@@ -10,9 +11,13 @@ import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
+  metadataBase: SITE_URL,
+  applicationName: siteConfig.name,
+  manifest: "/site.webmanifest",
+  robots: { index: !IS_PREVIEW, follow: true },
   title: {
     default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   icons: {

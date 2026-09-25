@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next"
+import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -8,6 +8,7 @@ import {
   getMangaRecommendations,
   getMangaReviews,
 } from "@/config/services/manga"
+import { mediaMetadata, mediaStructuredData } from "@/lib/seo"
 import { CategoryLabel } from "@/components/ui/category-label"
 import { CharactersRail } from "@/components/anime/people-grid"
 import { RecommendationsGrid } from "@/components/anime/recommendations-grid"
@@ -15,6 +16,7 @@ import { RelationsList } from "@/components/anime/relations-list"
 import { ReviewsList } from "@/components/anime/reviews-list"
 import { BackgroundImage } from "@/components/background-image"
 import { Image } from "@/components/custom-image"
+import { StructuredData } from "@/components/structured-data"
 
 interface Params {
   params: {
@@ -27,26 +29,10 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data } = await getMangaById(params.id)
-
-  if (!data?.mal_id) {
-    return { title: "Manga not found" }
-  }
-
-  const previousImages = (await parent).openGraph?.images || []
-
-  return {
-    title: data.title,
-    openGraph: {
-      images: [data.images.webp.image_url, ...previousImages],
-      tags: data.genres?.map((genre) => genre.name),
-    },
-    description: data.synopsis,
-  }
+  if (!data) notFound()
+  return mediaMetadata(data, "manga")
 }
 
 interface DetailSectionProps {
@@ -93,6 +79,7 @@ export default async function IndexPage({ params }: Params) {
 
   return (
     <>
+      <StructuredData data={mediaStructuredData(data, "manga")} />
       {data.images.webp.large_image_url && (
         <BackgroundImage
           alt={data.title}
@@ -108,6 +95,8 @@ export default async function IndexPage({ params }: Params) {
               <Image
                 src={data.images.webp.large_image_url}
                 alt={data.title}
+                lazy={false}
+                fetchPriority="high"
                 width={224}
                 height={300}
                 className="absolute inset-0 size-full object-cover"

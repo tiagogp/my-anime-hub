@@ -8,6 +8,7 @@ import { Image } from "./custom-image"
 import { CategoryLabel } from "./ui/category-label"
 
 interface CardHomeProps extends DataSessionProps {
+  headingLevel?: "h2" | "h3"
   index: number
   className?: string
   link: string
@@ -20,6 +21,7 @@ const formatMembers = (members: number) =>
   }).format(members)
 
 export const CardHome: FC<CardHomeProps> = ({
+  headingLevel: Heading = "h2",
   index,
   mal_id,
   route_id,
@@ -59,9 +61,9 @@ export const CardHome: FC<CardHomeProps> = ({
         {episodes ? ` · ${episodes} eps` : chapters ? ` · ${chapters} ch` : ""}
       </CategoryLabel>
 
-      <h2 className="line-clamp-2 font-display text-[1.375rem] leading-[1.15] text-foreground transition-colors group-hover:text-muted-foreground lg:text-lg">
+      <Heading className="line-clamp-2 font-display text-[1.375rem] leading-[1.15] text-foreground transition-colors group-hover:text-muted-foreground lg:text-lg">
         {title}
-      </h2>
+      </Heading>
 
       <p className="text-xs text-muted-foreground">
         Score {score ?? "N/A"} · {formatMembers(members)} members

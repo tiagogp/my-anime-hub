@@ -6,7 +6,14 @@ import LiteYouTubeEmbed, { LiteYouTubeProps } from "react-lite-youtube-embed"
 
 import { cn } from "@/lib/utils"
 
-export function Video({ id, title, ...rest }: LiteYouTubeProps) {
+export function Video({
+  id,
+  title,
+  wrapperClass,
+  iframeClass,
+  playerClass,
+  ...rest
+}: LiteYouTubeProps) {
   const [isEnabled, setIsEnabled] = useState(false)
 
   return (
@@ -28,6 +35,15 @@ export function Video({ id, title, ...rest }: LiteYouTubeProps) {
         {...rest}
         id={id}
         title={title}
+        wrapperClass={cn(
+          "relative aspect-video w-full bg-cover bg-center bg-no-repeat [&>.lty-thumbnail]:absolute [&>.lty-thumbnail]:inset-0 [&>.lty-thumbnail]:size-full [&>.lty-thumbnail]:object-cover [&>.lty-thumbnail]:object-center",
+          wrapperClass
+        )}
+        iframeClass={cn("absolute inset-0 size-full", iframeClass)}
+        playerClass={cn(
+          "absolute inset-0 size-full [&>span]:sr-only",
+          playerClass
+        )}
         hideButtonOnActivate
         onIframeAdded={() => setIsEnabled(true)}
       />

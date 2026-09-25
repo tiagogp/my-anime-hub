@@ -1,7 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import { BASE_URL } from "@/config/constants"
 import type { DataSessionProps } from "@/config/services/types"
 
 import { PAGES_LENGTH } from "./constants"
@@ -21,6 +20,7 @@ export const getYoutubeIdFromEmbedUrl = (url: string): string | null => {
 export function convertValuesToURLSearchParams(params: any) {
   const urlSearchParams = new URLSearchParams()
   Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === "") return
     urlSearchParams.append(key, value as string)
   })
 
@@ -54,7 +54,7 @@ export const formatterSessionUpcoming = (
   data: DataSessionProps[],
   slice?: number
 ) =>
-  data
+  (data ?? [])
     .reduce((acc, cur) => {
       const existOnAcc = acc.find((e) => e.title === cur.title)
 
@@ -65,15 +65,6 @@ export const formatterSessionUpcoming = (
       return [...acc, cur]
     }, [] as DataSessionProps[])
     .slice(0, slice || 10)
-
-export const formatterUrl = (search?: string, page?: number) => {
-  const url = new URL(`${BASE_URL}/manga`)
-  const params = { search, page }
-
-  url.search = convertValuesToURLSearchParams(params)
-
-  return url.toString()
-}
 
 export const getCurrentPage = (page?: string) => Math.max(Number(page) || 1, 1)
 

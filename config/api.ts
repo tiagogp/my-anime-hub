@@ -1,5 +1,2 @@
-import axios from 'axios';
-
-export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-})
+// Catalog requests run on the server through the cached AniList client.
+export { graphql } from "./services/anilist"

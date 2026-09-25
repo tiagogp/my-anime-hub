@@ -1,61 +1,130 @@
-import { fetchMangaData, getManga, getTopManga } from "@/config/services/top"
+import Link from "next/link"
+
+import { getMangaGenres } from "@/config/services/genres"
+import { getManga } from "@/config/services/top"
 import { PAGES_LENGTH } from "@/lib/constants"
-import { formatterUrl, getCurrentPage, paginate } from "@/lib/utils"
+import { getCurrentPage, paginate } from "@/lib/utils"
+import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
 import { CardHome } from "@/components/card-home"
-
-export const revalidate = 3600
+import { CatalogNav } from "@/components/catalog-nav"
+import { FilterBar } from "@/components/filter-bar"
+import { RandomButton } from "@/components/random-button"
 
 interface Params {
   searchParams: {
     search?: string
     page?: string
-    id?: string
+    type?: string
+    status?: string
+    genres?: string
+    order_by?: string
+    sort?: string
   }
 }
 
 export default async function IndexPage({ searchParams }: Params) {
-  const baseHref = "/manga?page="
-  const search = searchParams.search
-  const currentPage = getCurrentPage(searchParams.page)
+  const { search, page, type, status, genres, order_by, sort } = searchParams
 
-  const { data, pagination } = await fetchMangaData({
-    currentPage,
-    search,
-    page: Number(searchParams.page),
-  })
+  const currentPage = getCurrentPage(page)
 
-  const { current_page, has_next_page, last_visible_page } = pagination
+  const [data, genresResponse] = await Promise.all([
+    getManga({
+      limit: "25",
+      ...(search && { q: search }),
+      ...(type && { type }),
+      ...(status && { status }),
+      ...(genres && { genres }),
+      ...(order_by && { order_by }),
+      ...(sort && { sort }),
+      ...(Number(page) && { page: currentPage }),
+    }).catch(() => null),
+    getMangaGenres().catch(() => ({ data: [] })),
+  ])
 
-  const result = paginate(
-    pagination.last_visible_page,
-    currentPage,
-    PAGES_LENGTH
-  )
+  const result = data?.pagination
+    ? paginate(data.pagination.last_visible_page, currentPage, PAGES_LENGTH)
+    : []
+
+  const linkParams = new URLSearchParams()
+  if (search) linkParams.set("search", search)
+  if (type) linkParams.set("type", type)
+  if (status) linkParams.set("status", status)
+  if (genres) linkParams.set("genres", genres)
+  if (order_by) linkParams.set("order_by", order_by)
+  if (sort) linkParams.set("sort", sort)
+
+  const pageHref = (pageNumber: number) => {
+    const withPage = new URLSearchParams(linkParams)
+    withPage.set("page", String(pageNumber))
+    return `/manga?${withPage.toString()}`
+  }
 
   return (
-    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border-x border-t bg-background pb-16 sm:flex-row sm:pb-0">
-      <main className="flex-1 ">
-        {data?.map((item: any, index: number) => (
-          <CardHome
-            {...item}
-            link={"/manga"}
-            index={++index}
-            key={item.mal_id}
-          />
-        ))}
-        <Pagination
-          href={baseHref}
-          data={result}
-          search={search}
-          currentPage={current_page}
-          hasNextPage={has_next_page}
-          initialPage={formatterUrl(search, 1)}
-          previousPage={formatterUrl(search, current_page - 1)}
-          lastPage={formatterUrl(search, last_visible_page)}
-          nextPage={formatterUrl(search, current_page + 1)}
+    <section className="mx-auto w-full max-w-content px-4 pb-24 pt-12 sm:px-6 sm:pt-20">
+      <CatalogNav type="manga" />
+      <div className="mb-10 flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
+        <h1 className="font-display text-[1.75rem] leading-tight text-foreground sm:text-[2.5rem]">
+          Browse Manga
+        </h1>
+        <RandomButton type="manga" />
+      </div>
+
+      {search && (
+        <p className="mb-6 break-words text-sm text-muted-foreground">
+          Results for <span className="text-foreground">“{search}”</span>
+          {" · "}
+          <Link href="/manga" className="underline underline-offset-4">
+            Clear search
+          </Link>
+        </p>
+      )}
+
+      <div className="mb-10">
+        <FilterBar
+          type="manga"
+          basePath="/manga"
+          genres={genresResponse.data}
         />
-      </main>
+      </div>
+
+      {data?.data?.length ? (
+        <GalleryGrid>
+          {data.data.map((item: any, index: number) => (
+            <CardHome
+              {...item}
+              index={
+                25 * (Number(currentPage) > 0 ? Number(currentPage) - 1 : 0) +
+                index +
+                1
+              }
+              key={item.mal_id}
+              link={"/manga"}
+            />
+          ))}
+        </GalleryGrid>
+      ) : (
+        <p className="py-16 text-center text-sm text-muted-foreground">
+          {data
+            ? "No results found."
+            : "Unable to load right now. Please try again later."}
+        </p>
+      )}
+
+      {Boolean(data?.data?.length) && data?.pagination && (
+        <Pagination
+          href={`/manga?${linkParams.toString()}${
+            linkParams.toString() ? "&" : ""
+          }page=`}
+          data={result}
+          currentPage={data.pagination.current_page}
+          hasNextPage={data.pagination.has_next_page}
+          initialPage={pageHref(1)}
+          previousPage={pageHref(data.pagination.current_page - 1)}
+          lastPage={pageHref(data.pagination.last_visible_page)}
+          nextPage={pageHref(data.pagination.current_page + 1)}
+        />
+      )}
     </section>
   )
 }

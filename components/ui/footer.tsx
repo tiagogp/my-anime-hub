@@ -1,20 +1,30 @@
-import Link from 'next/link'
+import Link from "next/link"
 
 export const Footer = () => (
-  <div className='flex items-center justify-center py-4'>
-    <main className='w-full max-w-screen-lg text-center md:text-start'>
-      <span className='mx-2 text-sm opacity-70'>Built by{' '}
-        <Link href={'https://github.com/tiagogp-exe'}
-          className='underline hover:text-foreground/70'
-        >
-          Tiago Guimarães
-        </Link>. The source code is available on{' '}
-        <Link href={'https://github.com/tiagogp-exe/doc'}
-          className='underline hover:text-foreground/70'
-        >
-          GitHub
-        </Link>
-        .</span>
-    </main>
-  </div>
+  <footer className="mx-auto flex w-full max-w-content justify-center border-t border-border px-4 py-12 sm:px-6">
+    <p className="max-w-[52ch] text-center font-mono text-[0.6875rem] leading-relaxed tracking-wide text-muted-foreground sm:text-left">
+      Built by{" "}
+      <Link
+        href="https://github.com/tiagogp-exe"
+        className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+      >
+        Tiago Guimarães
+      </Link>
+      . Source available on{" "}
+      <Link
+        href="https://github.com/tiagogp-exe/doc"
+        className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+      >
+        GitHub
+      </Link>
+      . Data via{" "}
+      <Link
+        href="https://anilist.co"
+        className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+      >
+        AniList
+      </Link>
+      .
+    </p>
+  </footer>
 )

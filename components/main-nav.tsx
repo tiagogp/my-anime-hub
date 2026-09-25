@@ -1,17 +1,15 @@
-"use client"
+import Link from "next/link"
 
-import * as React from "react"
 import { Icons } from "@/components/icons"
-import { useRouter } from 'next/navigation'
 
 export function MainNav() {
-  const { push } = useRouter()
-
   return (
-    <div className="flex gap-6 md:gap-10 ">
-      <button aria-label="Home" name='home' onClick={() => push('/')} className="flex items-center ">
-        <Icons.logo className="h-7" />
-      </button>
-    </div>
+    <Link
+      href="/"
+      aria-label="Home"
+      className="flex shrink-0 items-center opacity-90 transition-opacity hover:opacity-100"
+    >
+      <Icons.logo className="h-6" />
+    </Link>
   )
 }

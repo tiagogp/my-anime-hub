@@ -1,14 +1,21 @@
-import { cache } from 'react';
-import { BASE_URL } from '../constants';
+import {
+  characters,
+  getMedia,
+  mapMedia,
+  recommendations,
+  reviews,
+  staff,
+} from "./anilist"
 
-
-export const getMangaById = cache(async (id: string) => {
-  const url = new URL(`${BASE_URL}/manga/${id}`);
-
-  const response = await fetch(url, {
-    cache: 'no-store'
-  });
-
-  return response.json();
-})
-
+export const getMangaById = async (id: string) => {
+  const media = await getMedia("MANGA", id)
+  return { data: media ? mapMedia(media) : null }
+}
+export const getMangaCharacters = async (id: string) =>
+  characters(await getMedia("MANGA", id))
+export const getMangaStaff = async (id: string) =>
+  staff(await getMedia("MANGA", id))
+export const getMangaRecommendations = async (id: string) =>
+  recommendations(await getMedia("MANGA", id))
+export const getMangaReviews = async (id: string) =>
+  reviews(await getMedia("MANGA", id))

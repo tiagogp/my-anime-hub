@@ -4,48 +4,61 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
-    --popover: 0 0% 96%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 262.1 83.3% 57.8%;
-    --radius: 0.5rem;
+    /* Dithered Pixel / Editorial — light (warm paper) */
+    --background: 42 31% 94%;
+    --foreground: 43 19% 7%;
+    --card: 42 29% 88%;
+    --card-foreground: 43 19% 7%;
+    --popover: 42 29% 88%;
+    --popover-foreground: 43 19% 7%;
+    --primary: 33 56% 52%;
+    --primary-foreground: 20 14% 10%;
+    --secondary: 42 29% 88%;
+    --secondary-foreground: 43 19% 7%;
+    --muted: 42 29% 88%;
+    --muted-foreground: 43 7% 40%;
+    --accent: 42 29% 88%;
+    --accent-foreground: 43 19% 7%;
+    --destructive: 5 51% 41%;
+    --destructive-foreground: 40 40% 96%;
+    --border: 42 21% 81%;
+    --input: 42 21% 81%;
+    --ring: 43 19% 7%;
+    --radius: 2px;
+
+    --accent-cool-teal: #1b3a3a;
+    --accent-cool-cyan: #5fa8a0;
+    --accent-cool-blue: #3d5a73;
+    --accent-cool-burgundy: #5c2a3a;
+    --accent-cool-rose: #b98080;
+    --accent-warm-amber: #c98a3e;
+    --accent-warm-gold: #e0b454;
+    --accent-warm-orange: #b8542e;
+    --accent-warm-red: #9e3b33;
+    --accent-warm-crimson: #5c1f22;
   }
 
   .dark {
-    --background: 260 7% 8%;
-    --foreground: 0 0% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 255 9% 9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 263.4 70% 50.4%;
+    /* Dithered Pixel / Editorial — dark */
+    --background: 0 0% 5%;
+    --foreground: 42 26% 93%;
+    --card: 0 0% 8%;
+    --card-foreground: 42 26% 93%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 42 26% 93%;
+    --primary: 33 56% 52%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 42 26% 93%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 37 4% 64%;
+    --accent: 0 0% 8%;
+    --accent-foreground: 42 26% 93%;
+    --destructive: 5 51% 41%;
+    --destructive-foreground: 40 40% 96%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 42 26% 93%;
   }
 }
 
@@ -55,5 +68,28 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-normal;
+  }
+  ::selection {
+    @apply bg-foreground text-background;
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

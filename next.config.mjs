@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
+      { protocol: "https", hostname: "s4.anilist.co" },
       {
         protocol: "https",
         hostname: "cdn.myanimelist.net",
@@ -13,7 +14,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "https://img.youtube.com",
+        hostname: "img.youtube.com",
       },
     ],
   },

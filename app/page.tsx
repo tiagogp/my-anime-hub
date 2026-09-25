@@ -3,95 +3,135 @@ import Link from "next/link"
 import { getSessionNow, getSessionUpcoming } from "@/config/services/seasons"
 import { getTopAnime } from "@/config/services/top"
 import { formatterSessionUpcoming } from "@/lib/utils"
-import { Footer } from "@/components/ui/footer"
-import Aurora from "@/components/aurora"
+import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { CardHome } from "@/components/card-home"
+import { RandomButton } from "@/components/random-button"
 
-export const revalidate = 3600
+// Render at request time so build-time failures cannot freeze the home fallback.
+// Individual AniList queries retain their one-hour server cache.
+export const dynamic = "force-dynamic"
+
+interface SectionProps {
+  title: string
+  moreHref: string
+  children: React.ReactNode
+}
+
+const Section = ({ title, moreHref, children }: SectionProps) => (
+  <section className="mx-auto w-full max-w-content px-4 py-16 sm:px-6 sm:py-24">
+    <div className="mb-10 flex items-end justify-between gap-4 border-b border-border pb-4">
+      <h2 className="font-display text-[1.75rem] leading-tight text-foreground sm:text-[2.5rem]">
+        {title}
+      </h2>
+      <Link
+        href={moreHref}
+        className="shrink-0 font-mono text-xs uppercase tracking-[0.04em] text-muted-foreground transition-colors hover:text-foreground"
+      >
+        More →
+      </Link>
+    </div>
+    {children}
+  </section>
+)
+
+const SectionError = () => (
+  <p className="font-mono text-sm text-muted-foreground">
+    Unable to load this section. Please try again in a moment.
+  </p>
+)
 
 export default async function IndexPage() {
-  const [seasonNow, topAnime, seasonUpcoming] = await Promise.all([
-    getSessionNow({
-      limit: "20",
-    }),
-    getTopAnime({
-      limit: "25",
-    }),
-    getSessionUpcoming({
-      limit: "15",
-    }),
-  ])
+  const [seasonNowResult, topAnimeResult, seasonUpcomingResult] =
+    await Promise.allSettled([
+      getSessionNow({
+        limit: "10",
+      }),
+      getTopAnime({
+        limit: "10",
+      }),
+      getSessionUpcoming({
+        limit: "10",
+      }),
+    ])
 
-  const formattedSessionNow = formatterSessionUpcoming(seasonNow.data)
-  const formattedAllTopAnime = formatterSessionUpcoming(topAnime.data, 26)
+  const seasonNowFailed = seasonNowResult.status === "rejected"
+  const topAnimeFailed = topAnimeResult.status === "rejected"
+  const seasonUpcomingFailed = seasonUpcomingResult.status === "rejected"
 
-  const formattedSessionUpcoming = formatterSessionUpcoming(seasonUpcoming.data)
+  const formattedSessionNow = seasonNowFailed
+    ? []
+    : formatterSessionUpcoming(seasonNowResult.value.data, 10)
+  const formattedTopAnime = topAnimeFailed
+    ? []
+    : formatterSessionUpcoming(topAnimeResult.value.data, 10)
+  const formattedSessionUpcoming = seasonUpcomingFailed
+    ? []
+    : formatterSessionUpcoming(seasonUpcomingResult.value.data, 10)
 
   return (
-    <div className="pb-16 sm:pb-0">
-      <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-y-6 rounded-lg border bg-background sm:flex-row">
-        <main className="w-full border-r md:flex-1">
-          {formattedAllTopAnime?.map((item, index) => (
-            <CardHome
-              {...item}
-              link={"/anime"}
-              index={++index}
-              key={item.mal_id}
-            />
-          ))}
-          <Link
-            href="/anime/top-anime"
-            className="flex cursor-pointer items-center justify-center border-b py-2 hover:bg-border/30 sm:border-b-0"
-          >
-            <h2 className="text-sm font-bold">More top anime</h2>
-          </Link>
-        </main>
-        <aside className="w-full sm:w-[300px]">
-          <div className="rounded-t-sm sm:rounded-tl-none sm:rounded-tr-sm">
-            <header className="sticky top-24 z-10 rounded-t-sm bg-border p-6 py-2 sm:top-16 sm:rounded-tl-none sm:rounded-tr-sm">
-              <h2 className="text-center font-bold ">Top Airing Anime</h2>
-            </header>
+    <div>
+      <header className="mx-auto flex w-full max-w-content flex-col gap-4 px-4 pb-4 pt-20 sm:px-6 sm:pt-28">
+        <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+          An anime &amp; manga catalog
+        </p>
+        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <h1 className="font-display text-[2.25rem] leading-[1.05] text-foreground sm:text-[3.5rem]">
+            What are you watching next?
+          </h1>
+          <RandomButton type="anime" className="shrink-0" />
+        </div>
+      </header>
 
+      <Section title="Now Airing" moreHref="/anime/top-airing">
+        {seasonNowFailed ? (
+          <SectionError />
+        ) : (
+          <GalleryGrid>
             {formattedSessionNow.map((item, index) => (
               <CardHome
                 {...item}
-                link={"/anime"}
-                index={++index}
+                link="/anime"
+                index={index + 1}
                 key={item.mal_id}
               />
             ))}
+          </GalleryGrid>
+        )}
+      </Section>
 
-            <Link
-              href="/anime/top-airing"
-              className="flex cursor-pointer items-center justify-center py-2 hover:bg-border/30"
-            >
-              <h2 className="text-sm font-bold">More top airing</h2>
-            </Link>
-          </div>
-          <div className="">
-            <header className="sticky top-24 z-10 bg-border p-6 py-2 sm:top-16">
-              <h2 className="text-center font-bold">Top Upcoming Anime</h2>
-            </header>
-
+      <Section title="Upcoming" moreHref="/anime/top-upcoming">
+        {seasonUpcomingFailed ? (
+          <SectionError />
+        ) : (
+          <GalleryGrid>
             {formattedSessionUpcoming.map((item, index) => (
               <CardHome
                 {...item}
-                link={"/anime"}
-                index={++index}
+                link="/anime"
+                index={index + 1}
                 key={item.mal_id}
               />
             ))}
+          </GalleryGrid>
+        )}
+      </Section>
 
-            <Link
-              href="/anime/top-upcoming"
-              className="flex cursor-pointer items-center justify-center border-b py-2 hover:bg-border/30"
-            >
-              <h2 className="text-sm font-bold">More top upcoming</h2>
-            </Link>
-          </div>
-        </aside>
-      </section>
-      <Footer />
+      <Section title="Top Anime" moreHref="/anime/top-anime">
+        {topAnimeFailed ? (
+          <SectionError />
+        ) : (
+          <GalleryGrid>
+            {formattedTopAnime.map((item, index) => (
+              <CardHome
+                {...item}
+                link="/anime"
+                index={index + 1}
+                key={item.mal_id}
+              />
+            ))}
+          </GalleryGrid>
+        )}
+      </Section>
     </div>
   )
 }

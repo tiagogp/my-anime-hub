@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 interface CustomImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string
@@ -15,20 +15,29 @@ export function Image({
   fallback,
   lazy = true,
   className,
+  onError,
   ...props
 }: CustomImageProps) {
-  const [loaded, setLoaded] = useState(false)
-  const [error, setError] = useState(false)
+  const [failedSources, setFailedSources] = useState<string[]>([])
+  useEffect(() => setFailedSources([]), [src, fallback])
+  const imageSrc =
+    [src, fallback].find(
+      (candidate) => candidate && !failedSources.includes(candidate)
+    ) || "/cover-placeholder.svg"
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       {...props}
-      src={error && fallback ? fallback : src}
+      src={imageSrc}
       alt={alt}
       loading={lazy ? "lazy" : undefined}
-      onLoad={() => setLoaded(true)}
-      onError={() => setError(true)}
+      onError={(event) => {
+        if (imageSrc !== "/cover-placeholder.svg") {
+          setFailedSources((sources) => [...sources, imageSrc])
+        }
+        onError?.(event)
+      }}
       className={className}
       style={{
         transition: "opacity 0.3s ease",

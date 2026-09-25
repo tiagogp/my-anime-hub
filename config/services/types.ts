@@ -4,6 +4,8 @@ export interface SessionsProps {
 }
 
 export interface DataSessionProps {
+  cover_color?: string | null
+  route_id?: string
   mal_id: number
   url: string
   images: Images
@@ -16,19 +18,22 @@ export interface DataSessionProps {
   title_synonyms: string[]
   type: string
   source: string
-  episodes: number
+  episodes: number | null
   status: string
   airing: boolean
   aired: Aired
   duration: string
   rating: string
-  score: number
+  score: number | null
   scored_by: number
   rank: number
   popularity: number
   members: number
   favorites: number
   chapters?: number
+  volumes?: number
+  authors?: RelationEntry[]
+  serializations?: RelationEntry[]
   synopsis: string
   background: any
   season: string
@@ -154,4 +159,127 @@ export interface Theme {
 export interface Params {
   sfw?: boolean
   limit?: string
+  page?: number
+}
+
+export interface RelationEntry {
+  mal_id: number
+  type: string
+  name: string
+  url: string
+}
+
+export interface Relation {
+  relation: string
+  entry: RelationEntry[]
+}
+
+export interface ExternalLink {
+  name: string
+  url: string
+}
+
+export interface AnimeFullExtra {
+  relations: Relation[]
+  external: ExternalLink[]
+  streaming: ExternalLink[]
+}
+
+export interface CharacterPerson {
+  mal_id: number
+  url: string
+  images: Images
+  name: string
+}
+
+export interface VoiceActor {
+  person: CharacterPerson
+  language: string
+}
+
+export interface CharacterEntry {
+  character: CharacterPerson
+  role: string
+  voice_actors?: VoiceActor[]
+}
+
+export interface StaffEntry {
+  person: CharacterPerson
+  positions: string[]
+}
+
+export interface RecommendationEntryData {
+  route_id?: string
+  mal_id: number
+  url: string
+  images: Images
+  title: string
+}
+
+export interface RecommendationEntry {
+  entry: RecommendationEntryData
+  url: string
+  votes: number
+}
+
+export interface ReviewUser {
+  username: string
+  url: string
+  images: {
+    jpg: {
+      image_url: string
+    }
+  }
+}
+
+export interface ReviewEntry {
+  mal_id: number
+  url: string
+  type: string
+  reactions?: Record<string, number>
+  date: string
+  review: string
+  score: number
+  is_spoiler: boolean
+  is_preliminary: boolean
+  tags: string[]
+  user: ReviewUser
+}
+
+export interface GenreEntry {
+  mal_id: number
+  name: string
+  url: string
+  count: number
+}
+
+export interface ScheduleEntry extends DataSessionProps {}
+
+export interface CharactersResponse {
+  data: CharacterEntry[]
+}
+
+export interface StaffResponse {
+  data: StaffEntry[]
+}
+
+export interface RecommendationsResponse {
+  data: RecommendationEntry[]
+}
+
+export interface ReviewsResponse {
+  data: ReviewEntry[]
+}
+
+export interface GenresResponse {
+  data: GenreEntry[]
+}
+
+export interface SchedulesResponse {
+  pagination: Pagination
+  data: ScheduleEntry[]
+}
+
+export interface RandomResponse {
+  data: DataSessionProps & AnimeFullExtra
 }

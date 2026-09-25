@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation"
 import Cookies from "cookies-js"
 import { UseFormRegister, useForm } from "react-hook-form"
 
-import { api } from "@/config/api"
+import { searchMedia } from "@/config/services/search"
 import type { DataSessionProps } from "@/config/services/types"
 
 import { useDebounce } from "./use-debounce"
@@ -61,7 +61,6 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const correctInitialPathname = isManga ? `manga` : `anime`
-
   const search = watch("search")
 
   const debouncedValue = useDebounce<string>(search, 500)
@@ -82,49 +81,31 @@ export const SearchProvider: FC<SearchProviderProps> = ({ children }) => {
   })
 
   useEffect(() => {
-    const updateSearchResult = async () => {
-      if (debouncedValue) {
-        setIsLoading(true)
-        const { data } = await api.get(
-          `/${correctInitialPathname}?q=${debouncedValue}&limit=10&sfw=true`
-        )
-        setIsLoading(false)
-        Cookies.set(COOKIES_KEYS.SEARCH, debouncedValue)
-        Cookies.set(
-          COOKIES_KEYS.SEARCH_RESULT,
-          JSON.stringify({
-            data: data.data.slice(0, 10),
-            haveMore:
-              data.pagination.current_page < data.pagination.last_visible_page,
-          })
-        )
-
-        setSearchResult({
-          data: data.data.slice(0, 10),
-          haveMore:
-            data.pagination.current_page < data.pagination.last_visible_page,
-        })
-      }
+    let cancelled = false
+    setSearchResult({ data: [], haveMore: false })
+    if (!debouncedValue?.trim()) {
+      setIsLoading(false)
+      return
     }
-
-    updateSearchResult()
-  }, [
-    COOKIES_KEYS.SEARCH,
-    COOKIES_KEYS.SEARCH_RESULT,
-    correctInitialPathname,
-    debouncedValue,
-  ])
+    setIsLoading(true)
+    searchMedia(isManga ? "manga" : "anime", debouncedValue)
+      .then((result) => {
+        if (!cancelled) setSearchResult(result)
+      })
+      .catch(() => {
+        if (!cancelled) setSearchResult({ data: [], haveMore: false })
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [debouncedValue, isManga])
 
   useEffect(() => {
-    const oldValueSearch = Cookies.get(COOKIES_KEYS.SEARCH) ?? ""
-    const oldValueSearchResult = Cookies.get(COOKIES_KEYS.SEARCH_RESULT)
-      ? localStorage.getItem(COOKIES_KEYS.SEARCH_RESULT) &&
-        JSON.parse(localStorage.getItem(COOKIES_KEYS.SEARCH_RESULT) ?? "")
-      : []
-
-    setValue("search", oldValueSearch)
-    setSearchResult(oldValueSearchResult)
-  }, [COOKIES_KEYS.SEARCH, COOKIES_KEYS.SEARCH_RESULT, setValue])
+    setValue("search", Cookies.get(COOKIES_KEYS.SEARCH) ?? "")
+  }, [COOKIES_KEYS.SEARCH, setValue])
 
   const setSearch = (value: string) => {
     Cookies.set(COOKIES_KEYS.SEARCH, value)

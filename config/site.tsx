@@ -1,4 +1,4 @@
-import { BookOpenText, HomeIcon } from 'lucide-react'
+import { BookOpenText, CalendarDays, HomeIcon } from 'lucide-react'
 
 export type SiteConfig = typeof siteConfig
 
@@ -18,6 +18,11 @@ export const siteConfig = {
       icon: <BookOpenText size={20} />,
       title: "Manga",
       href: "/manga",
+    },
+    {
+      icon: <CalendarDays size={20} />,
+      title: "Schedule",
+      href: "/schedule",
     },
   ],
   links: {

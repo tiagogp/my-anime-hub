@@ -1,9 +1,10 @@
-import { getManga, getTopManga } from "@/config/services/top"
+import { getTopManga } from "@/config/services/top"
 import { PAGES_LENGTH } from "@/lib/constants"
-import { formatterSessionUpcoming, getCurrentPage, paginate } from "@/lib/utils"
-import { Footer } from "@/components/ui/footer"
+import { getCurrentPage, paginate } from "@/lib/utils"
+import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
 import { CardHome } from "@/components/card-home"
+import { CatalogNav } from "@/components/catalog-nav"
 
 interface Params {
   searchParams: {
@@ -14,32 +15,39 @@ interface Params {
 
 export default async function IndexPage({ searchParams }: Params) {
   const currentPage = getCurrentPage(searchParams.page)
-  const { data, pagination } = await getTopManga({
-    page: currentPage,
-  })
+  const response = await getTopManga({ page: currentPage }).catch(() => null)
 
-  const result = paginate(
-    pagination.last_visible_page,
-    currentPage,
-    PAGES_LENGTH
-  )
+  const data = response?.data
+  const pagination = response?.pagination
+
+  const result = pagination
+    ? paginate(pagination.last_visible_page, currentPage, PAGES_LENGTH)
+    : []
 
   return (
-    <>
-      <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-lg border bg-background pb-16 sm:flex-row sm:pb-0">
-        <main className="flex-1">
-          {data?.map((item, index: number) => (
-            <CardHome
-              {...item}
-              index={
-                25 * (Number(currentPage) > 0 ? Number(currentPage) - 1 : 0) +
-                index +
-                1
-              }
-              key={item.mal_id}
-              link={"/manga"}
-            />
-          ))}
+    <section className="mx-auto w-full max-w-content px-4 pb-24 pt-12 sm:px-6 sm:pt-20">
+      <CatalogNav type="manga" />
+      <h1 className="mb-10 border-b border-border pb-4 font-display text-[1.75rem] leading-tight text-foreground sm:text-[2.5rem]">
+        Top Manga
+      </h1>
+
+      {data?.length && pagination ? (
+        <>
+          <GalleryGrid>
+            {data.map((item, index: number) => (
+              <CardHome
+                {...item}
+                index={
+                  25 * (Number(currentPage) > 0 ? Number(currentPage) - 1 : 0) +
+                  index +
+                  1
+                }
+                key={item.mal_id}
+                link={"/manga"}
+              />
+            ))}
+          </GalleryGrid>
+
           <Pagination
             data={result}
             href="/manga/top-manga?page="
@@ -52,9 +60,12 @@ export default async function IndexPage({ searchParams }: Params) {
               pagination.current_page - 1
             }`}
           />
-        </main>
-      </section>
-      <Footer />
-    </>
+        </>
+      ) : (
+        <p className="py-16 text-center text-sm text-muted-foreground">
+          Unable to load right now. Please try again later.
+        </p>
+      )}
+    </section>
   )
 }

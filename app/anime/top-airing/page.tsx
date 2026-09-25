@@ -1,8 +1,10 @@
-import { api } from "@/config/api"
+import { getSessionNow } from "@/config/services/seasons"
 import { PAGES_LENGTH } from "@/lib/constants"
 import { getCurrentPage, paginate } from "@/lib/utils"
+import { GalleryGrid } from "@/components/ui/gallery-grid"
 import { Pagination } from "@/components/ui/pagination"
 import { CardHome } from "@/components/card-home"
+import { CatalogNav } from "@/components/catalog-nav"
 
 interface Params {
   params: {}
@@ -15,45 +17,59 @@ interface Params {
 export default async function IndexPage({ searchParams }: Params) {
   const currentPage = getCurrentPage(searchParams.page)
 
-  const havePage = Number(searchParams.page) ? `&page=${currentPage}` : ""
-  const { data } = await api.get(`/seasons/now?sfw=true${havePage}`)
+  const data = await getSessionNow({
+    limit: "25",
+    ...(Number(searchParams.page) && { page: currentPage }),
+  }).catch(() => null)
 
-  const result = paginate(
-    data.pagination.last_visible_page,
-    currentPage,
-    PAGES_LENGTH
-  )
+  const result = data?.pagination
+    ? paginate(data.pagination.last_visible_page, currentPage, PAGES_LENGTH)
+    : []
 
   return (
-    <section className="mx-auto mt-20 flex w-full max-w-screen-lg flex-col-reverse items-start gap-6 rounded-t-lg border bg-background pb-16 sm:flex-row sm:pb-0">
-      <main className="flex-1">
-        {data?.data?.map((item: any, index: number) => (
-          <CardHome
-            {...item}
-            index={
-              25 * (Number(currentPage) > 0 ? Number(currentPage) - 1 : 0) +
-              index +
-              1
-            }
-            link={"/anime"}
-            key={item.mal_id}
+    <section className="mx-auto w-full max-w-content px-4 pb-24 pt-12 sm:px-6 sm:pt-20">
+      <CatalogNav type="anime" />
+      <h1 className="mb-10 border-b border-border pb-4 font-display text-[1.75rem] leading-tight text-foreground sm:text-[2.5rem]">
+        Now Airing
+      </h1>
+
+      {data?.data?.length ? (
+        <>
+          <GalleryGrid>
+            {data.data.map((item: any, index: number) => (
+              <CardHome
+                {...item}
+                index={
+                  25 * (Number(currentPage) > 0 ? Number(currentPage) - 1 : 0) +
+                  index +
+                  1
+                }
+                link={"/anime"}
+                key={item.mal_id}
+              />
+            ))}
+          </GalleryGrid>
+
+          <Pagination
+            data={result}
+            href="/anime/top-airing?page="
+            currentPage={data.pagination.current_page}
+            hasNextPage={data.pagination.has_next_page}
+            initialPage={`/anime/top-airing?page=1`}
+            lastPage={`/anime/top-airing?page=${data.pagination.last_visible_page}`}
+            nextPage={`/anime/top-airing?page=${
+              data.pagination.current_page + 1
+            }`}
+            previousPage={`/anime/top-airing?page=${
+              data.pagination.current_page - 1
+            }`}
           />
-        ))}
-        <Pagination
-          data={result}
-          href="/anime/top-airing?page="
-          currentPage={data.pagination.current_page}
-          hasNextPage={data.pagination.has_next_page}
-          initialPage={`/anime/top-airing?page=1`}
-          lastPage={`/anime/top-airing?page=${data.pagination.last_visible_page}`}
-          nextPage={`/anime/top-airing?page=${
-            data.pagination.current_page + 1
-          }`}
-          previousPage={`/anime/top-airing?page=${
-            data.pagination.current_page - 1
-          }`}
-        />
-      </main>
+        </>
+      ) : (
+        <p className="py-16 text-center text-sm text-muted-foreground">
+          Unable to load right now. Please try again later.
+        </p>
+      )}
     </section>
   )
 }

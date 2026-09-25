@@ -1,12 +1,21 @@
-import { cache } from 'react';
-import { BASE_URL } from '../constants';
+import {
+  characters,
+  getMedia,
+  mapMedia,
+  recommendations,
+  reviews,
+  staff,
+} from "./anilist"
 
-export const getAnimeById = cache(async (id: string) => {
-  const url = new URL(`${BASE_URL}/anime/${id}`);
-
-  const response = await fetch(url, {
-    cache: 'no-store'
-  });
-
-  return response.json();
-})
+export const getAnimeById = async (id: string) => {
+  const media = await getMedia("ANIME", id)
+  return { data: media ? mapMedia(media) : null }
+}
+export const getAnimeCharacters = async (id: string) =>
+  characters(await getMedia("ANIME", id))
+export const getAnimeStaff = async (id: string) =>
+  staff(await getMedia("ANIME", id))
+export const getAnimeRecommendations = async (id: string) =>
+  recommendations(await getMedia("ANIME", id))
+export const getAnimeReviews = async (id: string) =>
+  reviews(await getMedia("ANIME", id))

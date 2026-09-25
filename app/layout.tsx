@@ -2,12 +2,12 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
+import { fontDisplay, fontMono, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
+import { Footer } from "@/components/ui/footer"
+import Providers from "@/components/providers"
 import { SiteHeader } from "@/components/site-header"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
-import Providers from '@/components/providers'
 
 export const metadata: Metadata = {
   title: {
@@ -33,17 +33,31 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-popover font-sans text-foreground antialiased",
-            fontSans.variable
+            "min-h-screen bg-background font-sans text-foreground antialiased",
+            fontSans.variable,
+            fontMono.variable,
+            fontDisplay.variable
           )}
         >
           <Providers>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <div className="relative flex min-h-screen flex-col justify-between">
+              <div className="relative flex min-h-screen flex-col pb-[calc(4.5rem+env(safe-area-inset-bottom))] sm:pb-0">
+                <a
+                  href="#main-content"
+                  className="sr-only z-50 bg-background p-4 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+                >
+                  Skip to content
+                </a>
                 <SiteHeader />
-                <div>{children}</div>
+                <main
+                  id="main-content"
+                  tabIndex={-1}
+                  className="min-w-0 flex-1"
+                >
+                  {children}
+                </main>
+                <Footer />
               </div>
-              <TailwindIndicator />
             </ThemeProvider>
           </Providers>
         </body>

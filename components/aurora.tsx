@@ -1,8 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { motion } from "framer-motion"
-import { Vibrant } from "node-vibrant/browser"
+import { useEffect, useRef } from "react"
+import { motion, useReducedMotion } from "framer-motion"
 import { Color, Mesh, Program, Renderer, Triangle } from "ogl"
 
 const VERT = `#version 300 es
@@ -111,27 +110,23 @@ void main() {
 }
 `
 
+const DEFAULT_COLORS = ["#1b3a3a", "#3d5a73", "#1b3a3a"]
+
 interface AuroraProps {
   colorStops?: string[]
   amplitude?: number
   blend?: number
   time?: number
   speed?: number
-  imageURL: string
   opacity?: number
 }
 
 export default function Aurora(props: AuroraProps) {
-  const [palette, setPalette] = useState<Record<string, string>>({})
-  const isCorrectColor = Boolean(Object.values(palette).length)
-
-  const colors = Object.values(palette) || ["#5227FF", "#7cff67", "#5227FF"]
-
+  const reduceMotion = useReducedMotion()
   const {
-    colorStops = colors,
+    colorStops = DEFAULT_COLORS,
     amplitude = 1.0,
     blend = 0.5,
-    imageURL,
     opacity = 0.5,
   } = props
   const propsRef = useRef<AuroraProps>(props)
@@ -141,13 +136,19 @@ export default function Aurora(props: AuroraProps) {
 
   useEffect(() => {
     const ctn = ctnDom.current
-    if (!ctn) return
+    if (!ctn || reduceMotion || colorStops.length < 3) return
 
-    const renderer = new Renderer({
-      alpha: true,
-      premultipliedAlpha: true,
-      antialias: true,
-    })
+    let renderer: Renderer
+    try {
+      renderer = new Renderer({
+        alpha: true,
+        premultipliedAlpha: true,
+        antialias: true,
+      })
+    } catch {
+      // The decorative background is optional on devices without WebGL.
+      return
+    }
     const gl = renderer.gl
     gl.clearColor(0, 0, 0, 0)
     gl.enable(gl.BLEND)
@@ -220,25 +221,13 @@ export default function Aurora(props: AuroraProps) {
       }
       gl.getExtension("WEBGL_lose_context")?.loseContext()
     }
-  }, [amplitude, blend, colorStops])
-
-  useEffect(() => {
-    Vibrant.from(imageURL)
-      .getPalette()
-      .then((pal) => {
-        const colors: Record<string, string> = {}
-        Object.keys(pal).forEach((key) => {
-          if (pal[key]) colors[key] = pal[key]!.hex
-        })
-        setPalette(colors)
-      })
-  }, [imageURL])
+  }, [amplitude, blend, colorStops, reduceMotion])
 
   return (
     <motion.div
       ref={ctnDom}
       initial={{ opacity: 0 }}
-      animate={{ opacity: isCorrectColor ? opacity : 0 }}
+      animate={{ opacity: reduceMotion ? 0 : opacity }}
       className="absolute bottom-0 z-10 min-h-screen w-full rotate-180 mix-blend-color-burn dark:mix-blend-difference"
     />
   )

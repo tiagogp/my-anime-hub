@@ -2,12 +2,9 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronsLeft } from "lucide-react"
+
+import { cn } from "@/lib/utils"
 
 interface PaginationProps {
   currentPage: number
@@ -28,60 +25,62 @@ export const Pagination = ({
   initialPage,
   previousPage,
   nextPage,
-  lastPage,
   href,
   search,
 }: PaginationProps) => {
   const { push } = useRouter()
 
-  const searchValue = search ? `&search=${search}` : ""
+  const searchValue = search ? `&search=${encodeURIComponent(search)}` : ""
+
+  const controlClass =
+    "flex size-11 items-center justify-center border border-border font-mono text-xs text-foreground transition-colors duration-200 ease-out hover:bg-foreground hover:text-background disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-foreground"
 
   return (
-    <div className="flex flex-wrap justify-center gap-2 p-4">
+    <nav
+      aria-label="Pagination"
+      className="flex w-full flex-wrap justify-center gap-2 py-12"
+    >
       <button
+        aria-label="First page"
         name="initial-page"
         onClick={() => push(initialPage)}
-        className="flex size-8 items-center justify-center rounded-sm border hover:bg-border disabled:cursor-not-allowed disabled:opacity-50"
+        className={controlClass}
         disabled={currentPage === 1 || currentPage === 0}
       >
-        <ChevronsLeft size={12} />
+        <ChevronsLeft size={13} />
       </button>
       <button
+        aria-label="Previous page"
         name="previous-page"
         onClick={() => push(previousPage)}
-        className="flex size-8  items-center justify-center rounded-sm border hover:bg-border disabled:cursor-not-allowed disabled:opacity-50"
+        className={controlClass}
         disabled={currentPage === 1 || currentPage === 0}
       >
-        <ChevronLeft size={12} />
+        <ChevronLeft size={13} />
       </button>
       {data?.map((page: number) => (
-        <Link key={page} href={`${href}${page}${searchValue}`}>
-          <button
-            name={`page-${page}`}
-            className={`${
-              currentPage === page ? "bg-border" : ""
-            } flex size-8 items-center justify-center rounded-sm border hover:bg-border`}
-          >
-            <p className="text-xs">{page}</p>
-          </button>
+        <Link
+          key={page}
+          href={`${href}${page}${searchValue}`}
+          aria-label={`Page ${page}`}
+          aria-current={currentPage === page ? "page" : undefined}
+          className={cn(
+            controlClass,
+            currentPage === page && "bg-foreground text-background"
+          )}
+        >
+          {page}
         </Link>
       ))}
       <button
+        aria-label="Next page"
         name="next-page"
         onClick={() => push(nextPage)}
-        className="flex size-8 items-center justify-center rounded-sm border hover:bg-border disabled:cursor-not-allowed disabled:opacity-50"
+        className={controlClass}
         disabled={!hasNextPage}
       >
-        <ChevronRight size={12} />
+        <ChevronRight size={13} />
       </button>
-      <button
-        name="last-page"
-        onClick={() => push(lastPage)}
-        className="flex size-8 items-center justify-center rounded-sm border hover:bg-border disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={!hasNextPage}
-      >
-        <ChevronsRight size={12} />
-      </button>
-    </div>
+    </nav>
   )
 }
